@@ -1,0 +1,18 @@
+# Hugo
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+# Plan files can contain secrets (state values, sensitive variables)
+*.tfplan
+tfplan
+
+# Terraform backend settings (bucket name and region stay out of git)
+backend.hcl

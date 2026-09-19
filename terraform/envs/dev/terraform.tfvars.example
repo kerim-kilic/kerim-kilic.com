@@ -1,0 +1,13 @@
+cloudflare_zone_id    = "REPLACE_WITH_YOUR_ZONE_ID"
+cloudflare_account_id = "REPLACE_WITH_YOUR_ACCOUNT_ID"
+
+# Who may view dev. Add a friend's email to let them in, remove it to revoke, then `terraform apply`.
+allowed_emails = ["you@example.com", "friend@example.com"]
+
+# Optional: enables "Sign in with Google". Without these, people get a one-time code by email.
+# google_client_id     = "....apps.googleusercontent.com"
+# google_client_secret = "..."
+
+# domain_name       = "kerim-kilic.com"
+# aws_region        = "eu-central-1"
+# github_repository = "kerim-kilic/kerim-kilic.com"
