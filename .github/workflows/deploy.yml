@@ -1,0 +1,110 @@
+name: Build and deploy
+
+# main            -> prod (public site)
+# any other branch -> dev  (dev.<domain>, behind Cloudflare Access, includes drafts)
+# pull requests    -> build only
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # needed for AWS OIDC
+
+env:
+  HUGO_VERSION: "0.166.0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      target: ${{ steps.target.outputs.target }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick target environment
+        id: target
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            target=none
+          elif [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            target=prod
+          else
+            target=dev
+          fi
+          echo "target=$target" >> "$GITHUB_OUTPUT"
+          echo "Target environment: $target" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Set up Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Build (public)
+        if: steps.target.outputs.target != 'dev'
+        run: hugo --minify --gc
+
+      - name: "Build (dev - drafts visible, noindex, dev URLs)"
+        if: steps.target.outputs.target == 'dev'
+        run: hugo --minify --gc --environment dev --buildDrafts --buildFuture
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: public
+          retention-days: 7
+
+  deploy:
+    if: needs.build.outputs.target != 'none'
+    needs: build
+    runs-on: ubuntu-latest
+    # One deploy at a time per environment; a dev push never blocks a prod deploy.
+    concurrency:
+      group: deploy-${{ needs.build.outputs.target }}
+      cancel-in-progress: false
+    env:
+      # Repository variables are prefixed per environment: DEV_* and PROD_*
+      PREFIX: ${{ needs.build.outputs.target == 'prod' && 'PROD' || 'DEV' }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: public
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars[format('{0}_AWS_ROLE_ARN', env.PREFIX)] }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Sync to S3
+        env:
+          BUCKET: ${{ vars[format('{0}_S3_BUCKET', env.PREFIX)] }}
+        run: |
+          set -euo pipefail
+          dest="s3://$BUCKET"
+
+          # Fingerprinted assets (hash in the filename): safe to cache for a year.
+          aws s3 sync public/ "$dest" --delete \
+            --exclude "*" --include "css/*" --include "images/*" \
+            --cache-control "public, max-age=31536000, immutable"
+
+          # Static files whose names never change: cache for a day.
+          aws s3 sync public/ "$dest" --delete \
+            --exclude "*" --include "fonts/*" --include "og/*" \
+            --cache-control "public, max-age=86400"
+
+          # Everything else (HTML, sitemap, feeds, robots.txt): browsers always revalidate,
+          # CloudFront keeps it until the invalidation below.
+          aws s3 sync public/ "$dest" --delete \
+            --exclude "css/*" --exclude "images/*" --exclude "fonts/*" --exclude "og/*" \
+            --cache-control "public, max-age=0, s-maxage=86400, must-revalidate"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ vars[format('{0}_CLOUDFRONT_DISTRIBUTION_ID', env.PREFIX)] }}" \
+            --paths "/*"
