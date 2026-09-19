@@ -4,6 +4,9 @@ data "aws_caller_identity" "current" {}
 
 # The GitHub OIDC provider is account-wide and created once by the shared stack (envs/shared).
 locals {
+  github_owner = split("/", var.github_repository)[0]
+  github_repo  = split("/", var.github_repository)[1]
+
   github_oidc_provider_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
 }
 
@@ -22,11 +25,12 @@ data "aws_iam_policy_document" "deploy_trust" {
       values   = ["sts.amazonaws.com"]
     }
 
-    # Only the configured refs of this repository can deploy to this environment.
+    # Only the configured refs of this exact repository can deploy to this environment. GitHub's subject claim carries
+    # immutable numeric IDs: repo:<owner>@<owner_id>/<repo>@<repo_id>:ref:<ref>
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = [for ref in var.deploy_ref_patterns : "repo:${var.github_repository}:ref:${ref}"]
+      values   = [for ref in var.deploy_ref_patterns : "repo:${local.github_owner}@${var.github_owner_id}/${local.github_repo}@${var.github_repository_id}:ref:${ref}"]
     }
   }
 }

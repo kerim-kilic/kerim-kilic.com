@@ -141,7 +141,10 @@ cd terraform/envs/shared && terraform init -backend-config=../../backend.hcl && 
 # 2. Dev
 cd ../dev
 cp terraform.tfvars.example terraform.tfvars      # set cloudflare_zone_id
-# also set cloudflare_account_id and allowed_emails (yours, plus friends')
+# also set cloudflare_account_id, allowed_emails (yours, plus friends') and the two GitHub IDs
+# (github_owner_id, github_repository_id): GitHub's OIDC subject is repo:<owner>@<owner_id>/<repo>@<repo_id>:ref:...
+# and the deploy role trusts that exact pair. Owner: curl -s https://api.github.com/users/<owner> (field "id").
+# Repository ID: authenticated API, or the subject in a failed AssumeRoleWithWebIdentity event in CloudTrail.
 terraform init -backend-config=../../backend.hcl && terraform plan && terraform apply
 
 # 3. Prod, once dev looks right

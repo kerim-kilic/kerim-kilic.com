@@ -84,14 +84,15 @@ The trust policy is where the security lives:
 condition {
   test     = "StringLike"
   variable = "token.actions.githubusercontent.com:sub"
-  values   = [for ref in var.deploy_ref_patterns : "repo:${var.github_repository}:ref:${ref}"]
+  values   = [for ref in var.deploy_ref_patterns : "repo:${local.github_owner}@${var.github_owner_id}/${local.github_repo}@${var.github_repository_id}:ref:${ref}"]
 }
 ```
 
 For production, `deploy_ref_patterns` is `["refs/heads/main"]`, so only the `main` branch of this repository can assume the role. The role's permissions are small too: list the bucket, put and delete objects in it, and create an invalidation on this one distribution. Even if the role were misused, the worst outcome is a defaced website, not a compromised AWS account.
 
-Two practical consequences:
+Three practical consequences:
 
+- **GitHub now identifies the repository by numeric IDs.** My first deploy failed with `Not authorized to perform sts:AssumeRoleWithWebIdentity`, and the trust policy looked right. CloudTrail showed why: the token's subject was `repo:<owner>@<owner id>/<repo>@<repo id>:ref:refs/heads/dev`, not the older `repo:<owner>/<repo>:ref:...` I had written. Pinning the immutable IDs is the better fix than loosening the pattern with wildcards, because it stops someone who later recreates an account or repository with the same name from inheriting the trust. CloudTrail records the failed attempt, including the subject GitHub sent, so it's the quickest place to look.
 - **The repository name is baked into the trust policy.** I settled the name before the first `terraform apply`; renaming it afterwards would break deployments until the policy is updated.
 - **An AWS account can only have one GitHub OIDC provider.** It lives in its own small Terraform stack, shared by every environment, so tearing down one environment can't break another.
 

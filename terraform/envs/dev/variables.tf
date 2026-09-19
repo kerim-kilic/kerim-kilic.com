@@ -15,6 +15,16 @@ variable "aws_region" {
   default     = "eu-central-1"
 }
 
+variable "github_owner_id" {
+  description = "Numeric ID of the GitHub account that owns the repository (GitHub's OIDC subject includes it). Find it with: curl -s https://api.github.com/users/<owner> | grep '\"id\"'"
+  type        = string
+}
+
+variable "github_repository_id" {
+  description = "Numeric ID of the GitHub repository. Private repos need authentication for the API; alternatively read it from the OIDC subject in a failed AssumeRoleWithWebIdentity event in CloudTrail."
+  type        = string
+}
+
 variable "github_repository" {
   description = "GitHub repository (owner/name) allowed to deploy the site."
   type        = string

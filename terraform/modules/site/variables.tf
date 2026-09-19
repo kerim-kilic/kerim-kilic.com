@@ -32,6 +32,16 @@ variable "github_repository" {
   type        = string
 }
 
+variable "github_owner_id" {
+  description = "Numeric ID of the GitHub account that owns the repository. GitHub puts it in the OIDC subject claim (repo:<owner>@<owner_id>/<repo>@<repo_id>:...), which pins the trust to this exact account, not just a name that could be recreated."
+  type        = string
+}
+
+variable "github_repository_id" {
+  description = "Numeric ID of the GitHub repository (see github_owner_id)."
+  type        = string
+}
+
 variable "deploy_ref_patterns" {
   description = "Git refs allowed to assume the deploy role, e.g. [\"refs/heads/main\"] or [\"refs/heads/*\"]."
   type        = list(string)

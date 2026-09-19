@@ -1,4 +1,8 @@
 cloudflare_zone_id = "REPLACE_WITH_YOUR_ZONE_ID"
+# GitHub's OIDC tokens identify the repository by immutable numeric IDs; the deploy role only trusts this exact pair.
+github_owner_id      = "REPLACE_WITH_GITHUB_OWNER_ID"
+github_repository_id = "REPLACE_WITH_GITHUB_REPOSITORY_ID"
+
 # domain_name       = "kerim-kilic.com"
 # aws_region        = "eu-central-1"
 # github_repository = "kerim-kilic/kerim-kilic.com"
