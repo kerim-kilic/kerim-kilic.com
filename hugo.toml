@@ -1,0 +1,46 @@
+baseURL = "https://kerim-kilic.com/"
+locale = "en"
+title = "Kerim Kilic"
+enableRobotsTXT = true
+
+[pagination]
+  pagerSize = 10
+
+[params]
+  tagline = "Cloud engineer & architect"
+  description = "Cloud engineer and architect. Articles on cloud architecture, and a portfolio of platforms I've designed and built."
+  email = "mail@kerim-kilic.com"
+  linkedin = "https://www.linkedin.com/in/kerim-kilic/"
+  github = "https://github.com/kerim-kilic"
+
+[menus]
+  [[menus.main]]
+    name = "Articles"
+    pageRef = "/articles"
+    weight = 10
+  [[menus.main]]
+    name = "Portfolio"
+    pageRef = "/portfolio"
+    weight = 20
+  [[menus.main]]
+    name = "About"
+    pageRef = "/about"
+    weight = 30
+  [[menus.main]]
+    name = "Contact"
+    pageRef = "/contact"
+    weight = 40
+
+[markup]
+  [markup.highlight]
+    noClasses = true
+    style = "github-dark"
+    lineNos = false
+  [markup.goldmark.renderer]
+    unsafe = false
+
+[taxonomies]
+  tag = "tags"
+
+[outputs]
+  home = ["html", "rss"]

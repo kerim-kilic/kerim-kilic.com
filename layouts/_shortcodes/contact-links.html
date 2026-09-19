@@ -1,0 +1,22 @@
+{{- /* Contact rows with icons. URLs come from [params] in hugo.toml. */ -}}
+{{- $strip := `^https://(www\.)?` -}}
+<ul class="contact-links">
+  <li>
+    <a href="mailto:{{ site.Params.email }}">
+      {{ partial "icon.html" "envelope" }}
+      <span><small>Email</small>{{ site.Params.email }}</span>
+    </a>
+  </li>
+  <li>
+    <a href="{{ site.Params.linkedin }}" rel="me noopener">
+      {{ partial "icon.html" "linkedin" }}
+      <span><small>LinkedIn</small>{{ site.Params.linkedin | replaceRE $strip "" | strings.TrimSuffix "/" }}</span>
+    </a>
+  </li>
+  <li>
+    <a href="{{ site.Params.github }}" rel="me noopener">
+      {{ partial "icon.html" "github" }}
+      <span><small>GitHub</small>{{ site.Params.github | replaceRE $strip "" | strings.TrimSuffix "/" }}</span>
+    </a>
+  </li>
+</ul>

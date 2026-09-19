@@ -1,0 +1,14 @@
+- group: AWS
+  items: [Organizations & SCPs, IAM Identity Center, Transit Gateway, VPC & PrivateLink, Direct Connect, Route 53, Lambda, ECS & Fargate]
+- group: Multi-cloud
+  items: [Azure, Google Cloud, Entra ID federation, Azure Virtual WAN]
+- group: Infrastructure as code & automation
+  items: [Terraform, OpenTofu, GitHub Actions, Jenkins, Python (boto3), Bash, PowerShell]
+- group: Networking
+  items: [Hub-and-spoke at scale, Centralised egress, Hybrid connectivity, Routing & segmentation, VPC Lattice, IP address management]
+- group: Security & governance
+  items: [Guardrails with SCPs, Least-privilege access, Compliance reporting, Tagging governance, Cloud Custodian]
+- group: Migrations
+  items: [On-premises to cloud, Cloud-to-cloud, Consolidation & decommissioning]
+- group: Observability & FinOps
+  items: [Datadog, CloudWatch, Cost analysis & optimisation]

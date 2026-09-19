@@ -1,0 +1,8 @@
+<article class="item">
+  <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+  <p class="meta">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
+    · {{ .ReadingTime }} min read
+  </p>
+  {{ with .Description | default .Summary }}<p>{{ . | plainify | truncate 200 }}</p>{{ end }}
+</article>

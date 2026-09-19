@@ -1,0 +1,5 @@
+# Overrides for `hugo --environment dev` (the non-public dev site).
+baseURL = "https://dev.kerim-kilic.com/"
+
+[params]
+  noindex = true

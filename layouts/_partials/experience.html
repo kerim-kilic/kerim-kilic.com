@@ -1,0 +1,12 @@
+<ol class="timeline">
+  {{ range hugo.Data.experience }}
+  <li>
+    <p class="period">{{ .period }}</p>
+    <div>
+      <h3>{{ .role }} <span class="org">· {{ .org }}</span></h3>
+      <p>{{ .text }}</p>
+      {{ with .tags }}<ul class="tags">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>{{ end }}
+    </div>
+  </li>
+  {{ end }}
+</ol>

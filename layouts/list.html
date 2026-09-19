@@ -1,0 +1,21 @@
+{{ define "main" }}
+<header class="page-head">
+  <h1>{{ .Title }}</h1>
+  {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
+</header>
+{{ .Content }}
+{{ $pages := .Pages }}
+{{ if $pages }}
+  {{ $paginator := .Paginate $pages }}
+  {{ range $paginator.Pages }}
+    {{ if eq .Section "portfolio" }}
+      {{ partial "project-item.html" . }}
+    {{ else }}
+      {{ partial "article-item.html" . }}
+    {{ end }}
+  {{ end }}
+  {{ template "_internal/pagination.html" . }}
+{{ else }}
+  <p class="muted">Nothing here yet — check back soon.</p>
+{{ end }}
+{{ end }}

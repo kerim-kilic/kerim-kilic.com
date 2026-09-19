@@ -1,0 +1,54 @@
+{{ define "main" }}
+<section class="hero">
+  <div class="hero-text">
+    <p class="eyebrow">{{ site.Params.tagline }}</p>
+    <h1>{{ .Params.headline }}</h1>
+    <p class="lead">{{ .Params.lead }}</p>
+    <p class="actions">
+      <a class="btn" href="{{ "articles/" | relURL }}">Read the articles</a>
+      <a class="btn ghost" href="{{ "contact/" | relURL }}">Get in touch</a>
+    </p>
+  </div>
+  {{ partial "profile-photo.html" (dict "class" "hero-photo" "sizes" "160px") }}
+</section>
+
+{{ partial "credentials.html" . }}
+
+{{ with .Params.focus }}
+<section>
+  <h2>What I do</h2>
+  <div class="grid">
+    {{ range . }}
+    <div class="card">
+      <h3>{{ .title }}</h3>
+      <p>{{ .text }}</p>
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+<section>
+  <h2>Skills</h2>
+  {{ partial "skills.html" . }}
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Latest articles</h2>
+    <a href="{{ "articles/" | relURL }}">All articles →</a>
+  </div>
+  {{ $articles := first 3 (where site.RegularPages "Section" "articles") }}
+  {{ range $articles }}
+    {{ partial "article-item.html" . }}
+  {{ else }}
+    <p class="muted">Articles on cloud architecture are coming soon.</p>
+  {{ end }}
+</section>
+
+<section class="cta">
+  <h2>Working on something in the cloud?</h2>
+  <p>I'm open to conversations about architecture reviews, migrations and platform work.</p>
+  <p class="actions"><a class="btn" href="{{ "contact/" | relURL }}">Get in touch</a></p>
+</section>
+{{ end }}

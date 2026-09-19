@@ -1,0 +1,11 @@
+<footer class="site-footer">
+  <div class="container bar">
+    <p>© {{ now.Year }} {{ site.Title }}</p>
+    <ul class="social">
+      <li><a href="mailto:{{ site.Params.email }}" aria-label="Email" title="Email">{{ partial "icon.html" "envelope" }}</a></li>
+      <li><a href="{{ site.Params.linkedin }}" rel="me noopener" aria-label="LinkedIn" title="LinkedIn">{{ partial "icon.html" "linkedin" }}</a></li>
+      <li><a href="{{ site.Params.github }}" rel="me noopener" aria-label="GitHub" title="GitHub">{{ partial "icon.html" "github" }}</a></li>
+      <li><a href="{{ "index.xml" | relURL }}" aria-label="RSS feed" title="RSS feed">{{ partial "icon.html" "rss" }}</a></li>
+    </ul>
+  </div>
+</footer>

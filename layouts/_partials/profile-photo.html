@@ -1,0 +1,11 @@
+{{- /* Context: dict with "class" and "sizes" (the CSS display width, e.g. "144px"). */ -}}
+{{- with resources.Get "images/profile.jpg" -}}
+  {{- $small := .Resize "240x webp q85" -}}
+  {{- $large := .Resize "480x webp q85" -}}
+  <img class="portrait {{ $.class }}"
+       src="{{ $small.RelPermalink }}"
+       srcset="{{ $small.RelPermalink }} 240w, {{ $large.RelPermalink }} 480w"
+       sizes="{{ $.sizes }}"
+       width="{{ $small.Width }}" height="{{ $small.Height }}"
+       alt="Kerim Kilic" decoding="async">
+{{- end -}}

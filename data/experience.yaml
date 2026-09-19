@@ -1,0 +1,31 @@
+# Shown on the About page. Deliberately general: no internal figures or project details.
+- period: "2026 – present"
+  role: "Lead Cloud Engineer"
+  org: "Clarivate"
+  text: "Own the architecture and technical direction of the core public cloud platform across AWS, Azure and Google Cloud. Lead the network, identity and cost-optimisation workstreams."
+  tags: [AWS, Azure, Google Cloud, Terraform]
+- period: "2025 – 2026"
+  role: "Senior Cloud Engineer"
+  org: "Clarivate"
+  text: "Led the move of the organisation's AWS accounts to centralised single sign-on. Built the pipeline that manages shared network infrastructure as code, and improved tagging compliance and observability."
+  tags: [AWS, Terraform, GitHub Actions, Networking]
+- period: "2024 – 2025"
+  role: "Cloud Engineer"
+  org: "Clarivate"
+  text: "Designed a hybrid and multi-cloud network strategy connecting AWS, Azure and on-premises environments. Ran the single sign-on pilot and automated cloud service deployments in Terraform."
+  tags: [Terraform, Azure, Networking, Identity]
+- period: "2022 – 2024"
+  role: "Associate Cloud Engineer"
+  org: "Clarivate"
+  text: "Built and extended the AWS account management pipeline with Terraform modules for networking and access roles. Automated routine account and fleet management with Python on AWS Lambda."
+  tags: [Terraform, Python, Lambda, AWS]
+- period: "2021 – 2022"
+  role: "Data Analyst"
+  org: "Nowi"
+  text: "Built data pipelines and dashboards in R and SQL for commercial stakeholders."
+  tags: [R, SQL]
+- period: "2018 – 2021"
+  role: "Electronics engineering"
+  org: "Nowi · Momo Medical · Inrada"
+  text: "Application and electrical engineering on ultra-low-power IoT hardware and electronics for a certified medical device."
+  tags: [IoT, BLE, Embedded]

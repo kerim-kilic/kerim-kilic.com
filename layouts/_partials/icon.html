@@ -1,0 +1,7 @@
+{{- /* Inlines assets/icons/<name>.svg (Bootstrap Icons, MIT) so it inherits currentColor. Usage: partial "icon.html" "github" */ -}}
+{{- $name := . -}}
+{{- with resources.Get (printf "icons/%s.svg" $name) -}}
+  {{- .Content | replaceRE `\s(?:width|height)="16"` "" | replaceRE `class="[^"]*"` `class="icon" aria-hidden="true" focusable="false"` | safeHTML -}}
+{{- else -}}
+  {{- errorf "icon %q not found in assets/icons" $name -}}
+{{- end -}}
