@@ -188,8 +188,9 @@ Google, or ask for a one-time code sent to that address. To revoke someone, remo
 Dev proves the content and the pipeline. It can't prove what visitors get on prod (the real certificate, headers,
 caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn't. So test prod right after go-live.
 
-1. The old domain currently redirects to LinkedIn. Applying prod replaces that with the new site, which is empty until
-   the first deploy. Do steps 2 to 4 back-to-back.
+1. Applying prod replaces whatever the domain served before with the new site, which is empty until the first deploy.
+   Remove any old DNS records for the apex and `www` first, and do steps 2 to 4 back-to-back so that gap lasts only a
+   couple of minutes.
 2. `terraform apply` in `envs/prod`, then set the `PROD_*` repository variables.
 3. Merge `dev` into `main`. The workflow deploys prod.
 4. Run the smoke test:
@@ -207,11 +208,19 @@ caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn'
 
 Roll back a bad content deploy by reverting the merge on `main`; the workflow redeploys the previous version.
 
+## License
+
+- The **code and configuration** are MIT licensed: see [`LICENSE`](LICENSE).
+- The **writing, photograph, personal data and diagram drawings** are all rights reserved: see
+  [`CONTENT-LICENSE.md`](CONTENT-LICENSE.md).
+- **Third-party material** (fonts, icons, the AWS Architecture Icons in the diagrams) keeps its own terms:
+  see [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md).
+
 ## Credits
 
 - Diagrams in `assets/diagrams/` use icons from the [AWS Architecture Icons](https://aws.amazon.com/architecture/icons/)
   (CloudFront, S3, IAM), embedded unmodified and scaled only. AWS, Amazon S3, Amazon CloudFront and AWS Identity and
   Access Management are trademarks of Amazon.com, Inc. or its affiliates. This site is not affiliated with or endorsed
   by AWS.
-- Fonts: Inter and Space Grotesk under the SIL Open Font License, see `static/fonts/README.md`.
-- Icons: see `assets/icons/README.md`.
+- Fonts: Inter and Space Grotesk under the SIL Open Font License; icons: Bootstrap Icons (MIT). Licence texts and
+  attribution are in [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md).
