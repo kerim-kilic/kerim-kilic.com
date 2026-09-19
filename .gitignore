@@ -16,3 +16,6 @@ tfplan
 
 # Terraform backend settings (bucket name and region stay out of git)
 backend.hcl
+
+# Working notes and planning kept out of the repository
+documentation/private/
