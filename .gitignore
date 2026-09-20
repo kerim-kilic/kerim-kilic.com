@@ -19,6 +19,3 @@ backend.hcl
 
 # Working notes and planning kept out of the repository
 documentation/private/
-
-# Knowledge graph output (local, regenerated)
-graphify-out/
