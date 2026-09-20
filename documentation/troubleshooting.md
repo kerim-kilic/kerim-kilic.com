@@ -30,7 +30,8 @@ requested. Events can take a few minutes to appear.
 | Symptom | Cause | Fix |
 |---|---|---|
 | Works in a private window, not in the normal browser | Stale cookies or a cached failed lookup in that browser | Clear site data for the dev hostname, or use private windows |
-| The login page never sends a code | The email isn't exactly on the allowlist, or the code went to spam | Check `allowed_emails`; wait a minute; check spam |
+| The login page never sends a code | The email isn't exactly on the allowlist, or the code went to spam | Check `allowed_emails` (exact address, no typos); wait a minute; check spam |
+| The login page offers only "Cloudflare", or a guest sees "Cloudflare sign-in is restricted to members of the account" | The one-time PIN login method doesn't exist in the Cloudflare account, so the only method left is the sign-in for account members | Apply `envs/dev`: it creates the one-time PIN method and limits the application to the methods Terraform manages |
 | "Too many redirects" after signing in | Cloudflare is talking HTTP to CloudFront (SSL mode Flexible) | Check the configuration rule sets Full (strict) for the dev hostname |
 | Cloudflare error 525 or 526 | TLS between Cloudflare and CloudFront failed | Confirm the ACM certificate covers the hostname and is attached to the distribution |
 | Plain 403 after signing in | The secret header isn't being added | Check the request-header transform rule exists and matches the dev hostname |
@@ -55,6 +56,7 @@ curl -sI https://<distribution>.cloudfront.net/ # 403: the secret-header check c
 | A stale state lock after an interrupted run | The run died mid-apply | `terraform force-unlock <lock id>` once you're sure nothing is running |
 | `InvalidClientTokenId` right after creating an access key | The new key hasn't propagated | Wait up to a minute and retry |
 | Apply fails on an existing DNS record | A same-named record already exists in Cloudflare | Delete or rename it, then apply |
+| Changing `allowed_emails` also shows IAM, bucket policy and CloudFront changes, or apply fails with "Provider produced inconsistent final plan" | A module-level `depends_on` on the access module makes every data source in the site module wait until apply | Don't put `depends_on` on the module call; order resources inside the modules instead |
 
 ## Access keys and profiles
 

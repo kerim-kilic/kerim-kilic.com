@@ -130,7 +130,10 @@ Before the first apply, in the Cloudflare dashboard:
 Optional, for "Sign in with Google": in the Google Cloud console create an OAuth client (type *Web application*) with the
 authorised redirect URI `https://<your-team-name>.cloudflareaccess.com/cdn-cgi/access/callback`, set the consent screen
 to *In production* (only basic email scopes are requested), and put the client ID and secret in
-`envs/dev/terraform.tfvars`. Without them, people get a one-time code by email instead.
+`envs/dev/terraform.tfvars`. Without them, people get a one-time code by email instead. Terraform creates that
+one-time PIN login method itself (a new Cloudflare account doesn't have it switched on), and the Access application
+offers only the methods Terraform manages, so Cloudflare's own dashboard sign-in, which only members of your account
+can use, never appears on the login page.
 
 ```bash
 # 0. Once: cp terraform/backend.hcl.example terraform/backend.hcl, and fill it in (see "State bucket")
