@@ -5,7 +5,8 @@ Personal site and articles on cloud architecture. Built with [Hugo](https://gohu
 
 This is a personal site, published openly as part of a portfolio, not as a template: the names, domains and IDs are
 specific to it. You're welcome to read it and reuse the code (see [Licence](#licence)). Typo fixes and corrections are
-welcome as issues or pull requests. To report a security problem, see [`SECURITY.md`](SECURITY.md).
+welcome as issues (pull requests are limited to collaborators). To report a security problem, see
+[`SECURITY.md`](SECURITY.md).
 
 ## Requirements
 

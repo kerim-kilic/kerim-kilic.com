@@ -84,7 +84,8 @@ GitHub OIDC, sync to S3 in three passes with different `Cache-Control` values, a
 - **Role permissions are minimal:** list, put and delete objects in its own bucket, and create an invalidation on its own
   distribution.
 - **Actions stay current.** Dependabot proposes updates to the GitHub Actions the workflow uses (weekly, grouped). Its
-  branches only build; they never deploy.
+  pull requests target `dev`, so a new version is deployed and tested there before it can reach `main`. Its own branches
+  only build; they never deploy.
 - **Repository variables** (not secrets) select the target: `AWS_REGION`, and `DEV_` / `PROD_` variants of the role ARN,
   bucket name and distribution ID.
 - **Cache policy by file class:** fingerprinted `css/` and `images/` are `immutable` for a year; `fonts/` and `og/` for a

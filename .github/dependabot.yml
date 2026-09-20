@@ -1,8 +1,11 @@
 # Keeps the GitHub Actions in .github/workflows up to date: one grouped pull request a week when a new release exists.
+# Pull requests target dev, not the default branch, so a new action version is deployed and tested on dev before it can
+# reach main (and production). Security updates may still target the default branch.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "dev"
     schedule:
       interval: "weekly"
     groups:
