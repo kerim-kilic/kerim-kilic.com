@@ -6,7 +6,7 @@
     <p class="lead">{{ .Params.lead }}</p>
     <p class="actions">
       <a class="btn" href="{{ "articles/" | relURL }}">Read the articles</a>
-      <a class="btn ghost" href="{{ "contact/" | relURL }}">Get in touch</a>
+      <a class="btn ghost" href="{{ "portfolio/" | relURL }}">View portfolio</a>
     </p>
   </div>
   {{ partial "profile-photo.html" (dict "class" "hero-photo" "sizes" "160px") }}
@@ -47,8 +47,8 @@
 </section>
 
 <section class="cta">
-  <h2>Working on something in the cloud?</h2>
-  <p>I'm open to conversations about architecture reviews, migrations and platform work.</p>
-  <p class="actions"><a class="btn" href="{{ "contact/" | relURL }}">Get in touch</a></p>
+  <h2>Want to talk cloud architecture?</h2>
+  <p>I'm always happy to compare notes, hear how you've solved something, or take questions about what I've written.</p>
+  <p class="actions"><a class="btn" href="{{ "contact/" | relURL }}">Say hello</a></p>
 </section>
 {{ end }}
