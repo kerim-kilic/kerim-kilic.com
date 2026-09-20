@@ -26,8 +26,10 @@ profiles.
 
 The diagrams in `assets/diagrams/` embed three icons (Amazon CloudFront, Amazon S3, AWS Identity and Access Management)
 from the [AWS Architecture Icons](https://aws.amazon.com/architecture/icons/), Copyright (c) Amazon Web Services, Inc.,
-embedded unmodified and scaled only. They are used to illustrate AWS architecture and remain subject to AWS's terms, not to
-any licence in this repository. AWS, Amazon S3, Amazon CloudFront and AWS Identity and Access Management are trademarks
+embedded unmodified and scaled only. AWS states on that page that it allows customers and partners to use these assets
+to create architecture diagrams, and its [trademark guidelines](https://aws.amazon.com/trademark-guidelines/) ask that the
+logos are not altered and that use does not imply endorsement. The icons remain AWS's property and are not covered by any
+licence in this repository. AWS, Amazon S3, Amazon CloudFront and AWS Identity and Access Management are trademarks
 of Amazon.com, Inc. or its affiliates. This site is not affiliated with or endorsed by AWS.
 
 ## Build and infrastructure tools (not redistributed)
