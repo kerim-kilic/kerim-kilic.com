@@ -23,13 +23,23 @@ resource "cloudflare_zero_trust_access_policy" "allow_list" {
   include = [for email in var.allowed_emails : { email = { email = email } }]
 }
 
-# No allowed_idps set: every configured login method is offered (Google, plus the built-in one-time code).
+# The one-time code login is not on by default in a Cloudflare account, so it is created here.
+resource "cloudflare_zero_trust_access_identity_provider" "one_time_pin" {
+  account_id = var.cloudflare_account_id
+  name       = "One-time PIN"
+  type       = "onetimepin"
+  config     = {}
+}
+
+# allowed_idps is set explicitly. Left unset, the login page also offers "Cloudflare" (dashboard sign-in), which
+# only members of the Cloudflare account can use, so anyone else who picks it is turned away.
 resource "cloudflare_zero_trust_access_application" "site" {
   account_id       = var.cloudflare_account_id
   name             = var.hostname
   domain           = var.hostname
   type             = "self_hosted"
   session_duration = var.session_duration
+  allowed_idps     = concat([cloudflare_zero_trust_access_identity_provider.one_time_pin.id], cloudflare_zero_trust_access_identity_provider.google[*].id)
 
   policies = [{
     id         = cloudflare_zero_trust_access_policy.allow_list.id
