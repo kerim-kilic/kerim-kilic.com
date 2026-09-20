@@ -23,7 +23,7 @@ This article walks through how it fits together, the decisions behind it, and th
 
 The site is generated with [Hugo](https://gohugo.io/): one binary, Markdown in, HTML out, and a build that takes well under a second. The output is served from S3 through CloudFront.
 
-{{< diagram name="request-path" caption="The bucket is private. The only route to a page is through CloudFront, which rewrites the URL, checks its cache and, on a miss, reads from S3 with a signed request. Cloudflare only answers the DNS lookup; it doesn't proxy any traffic." >}}
+{{< diagram name="request-path" caption="The bucket is private. The only route to a page is through CloudFront, which rewrites the URL, checks its cache and, on a miss, reads from S3 with a signed request. On production, Cloudflare only answers the DNS lookup; it doesn't proxy any traffic." >}}
 
 ### Why not just turn on S3 website hosting?
 
@@ -102,7 +102,7 @@ Left alone, S3 objects come back without a `Cache-Control` header and browsers g
 
 - **Fingerprinted assets** (the CSS and the processed images have a content hash in the filename) are cached for a year and marked `immutable`.
 - **Files whose names never change**, such as the fonts and the social preview images, are cached for a day.
-- **Everything else**, mostly HTML, is revalidated by browsers on every visit, while CloudFront keeps it until the next deploy, when the workflow invalidates `/*`. The site is small enough that invalidating everything is simpler than anything cleverer.
+- **Everything else**, mostly HTML, is revalidated by browsers on every visit, while CloudFront may keep it for up to a day. Every deploy invalidates `/*`, so new content shows up straight away. The site is small enough that invalidating everything is simpler than anything cleverer.
 
 ## A dev site before production
 
@@ -111,14 +111,15 @@ I didn't want the first version of an article to go live untested, so there are 
 - **Branches decide the target.** `main` deploys to production. Any other branch deploys to dev, and pull requests only build.
 - **Separate roles.** The production role trusts `main` only (the pattern above), and the dev role trusts any branch but can only write the dev bucket, so a feature branch can never touch the live site.
 - **Dev is private.** It sits behind Cloudflare Access: friends sign in with Google or a one-time code sent to their email, and only addresses on an allowlist get through. I considered an IP allowlist, but a home IP changes without warning and it can't cover friends on other networks.
+- **The login methods are listed explicitly.** A new Cloudflare account doesn't have the one-time code login switched on, so Terraform creates it. Left unrestricted, the login page also offers "Cloudflare" sign-in, which only members of my Cloudflare account can use, and my first tester hit exactly that dead end. The Access application now names the methods it accepts.
 - **The back door is closed.** Cloudflare adds a secret header to every request it forwards, and the CloudFront Function refuses anything without it. Without that check, anyone who found the raw `cloudfront.net` address could skip the login.
 - **Dev shows drafts, marked `noindex`.** It builds with drafts visible and tells search engines to stay away, so I can review an article there before it goes public.
 
-Because the two environments share a module, dev is a copy of production with a login in front. The one difference is the traffic path: dev goes through Cloudflare's proxy so Access can work, while production goes straight to CloudFront. Anything that works on dev works on production, apart from that extra hop.
+Because the two environments share a module, dev is a copy of production with a login in front. The one difference is the traffic path: dev goes through Cloudflare's proxy so Access can work, while production goes straight to CloudFront. Anything that works on dev should work on production, apart from that extra hop. To cover the gap, a small script (`tools/smoke-test.sh`) checks the live production site right after go-live: pages, the 404, the redirects, the security and cache headers, and that the certificate is the one CloudFront serves.
 
 ## How the Terraform is laid out
 
-The site itself is one module, `modules/site`, that takes a hostname and produces everything below. Three small root folders use it:
+The site itself is one module, `modules/site`, that takes a hostname and produces everything below. Two small root folders, one per environment, use it, and a third holds the one account-wide resource:
 
 | Path | What it defines |
 |------|-----------------|
@@ -127,6 +128,7 @@ The site itself is one module, `modules/site`, that takes a hostname and produce
 | `modules/site/dns.tf` | The ACM certificate, its validation records and the site records in Cloudflare |
 | `modules/site/github_oidc.tf` | The deploy role and its permissions |
 | `modules/site/function.js.tftpl` | The CloudFront Function shown above, as a template |
+| `modules/private-access` | The Cloudflare Access login and two zone rules that keep dev private (dev only) |
 | `envs/shared` | The account-wide GitHub OIDC provider |
 | `envs/dev`, `envs/prod` | The two environments, each with its own state |
 
@@ -136,7 +138,7 @@ State is stored in a private, versioned S3 bucket, with one key per environment.
 
 - **Terraform in CI.** I still run `terraform apply` from my laptop, because the credentials it needs are too powerful to hand to a public repository's workflows. The next step is plans on pull requests and applies on merge, using a separate, narrowly scoped role.
 - **A Content-Security-Policy.** The managed security-headers policy covers HSTS, content-type sniffing, framing and referrer policy, but not CSP. The site is static and self-hosted, fonts included, so a strict CSP should be easy to add.
-- **Pin the GitHub Actions to commit SHAs** rather than version tags.
+- **Pin the GitHub Actions to commit SHAs.** They follow major-version tags and Dependabot proposes updates, but a maintainer can move a tag and nobody can move a commit SHA.
 - **Logging.** There are no access logs or alerts yet.
 
 That's the whole thing, and it's deliberately boring. If you spot something I got wrong, or you'd have done it differently, I'd like to hear about it. You'll find me on [LinkedIn](https://www.linkedin.com/in/kerim-kilic/) or by [email](mailto:mail@kerim-kilic.com).
