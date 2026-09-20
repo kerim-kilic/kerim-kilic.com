@@ -22,7 +22,7 @@ jobs:
     outputs:
       target: ${{ steps.target.outputs.target }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Pick target environment
         id: target
@@ -51,14 +51,15 @@ jobs:
         if: steps.target.outputs.target == 'dev'
         run: hugo --minify --gc --environment dev --buildDrafts --buildFuture
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: site
           path: public
           retention-days: 7
 
   deploy:
-    if: needs.build.outputs.target != 'none'
+    # Dependabot's branches only build (its pull requests are the check); they never deploy.
+    if: needs.build.outputs.target != 'none' && github.actor != 'dependabot[bot]'
     needs: build
     runs-on: ubuntu-latest
     # One deploy at a time per environment; a dev push never blocks a prod deploy.
@@ -69,13 +70,13 @@ jobs:
       # Repository variables are prefixed per environment: DEV_* and PROD_*
       PREFIX: ${{ needs.build.outputs.target == 'prod' && 'PROD' || 'DEV' }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: site
           path: public
 
       - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars[format('{0}_AWS_ROLE_ARN', env.PREFIX)] }}
           aws-region: ${{ vars.AWS_REGION }}
