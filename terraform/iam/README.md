@@ -35,9 +35,9 @@ smaller policy (`modules/site/github_oidc.tf`).
   leaving long-lived access keys lying around.
 - **CloudFront actions use `Resource: "*"`.** Several create actions can't be scoped to a resource that doesn't exist
   yet.
-- **It was derived from the Terraform code, not tested against a live account.** Every action name was checked against
-  AWS's published action list, but if an apply fails with `AccessDenied`, the error names the missing action: add it to
-  the right statement, re-create the policy version, and re-run.
+- **It was derived from the Terraform code**, and every action name was checked against AWS's published action list. It
+  has been used to apply the dev environment. If an apply fails with `AccessDenied`, the error names the missing action:
+  add it to the right statement, re-create the policy version, and re-run.
 - If you change the domain, update the `kerim-kilic-com-site` name patterns to match.
 
 ## Letting the user manage its own access key

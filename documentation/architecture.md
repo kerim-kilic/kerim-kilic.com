@@ -81,6 +81,8 @@ GitHub OIDC, sync to S3 in three passes with different `Cache-Control` values, a
   same name from inheriting the trust.
 - **Role permissions are minimal:** list, put and delete objects in its own bucket, and create an invalidation on its own
   distribution.
+- **Actions stay current.** Dependabot proposes updates to the GitHub Actions the workflow uses (weekly, grouped). Its
+  branches only build; they never deploy.
 - **Repository variables** (not secrets) select the target: `AWS_REGION`, and `DEV_` / `PROD_` variants of the role ARN,
   bucket name and distribution ID.
 - **Cache policy by file class:** fingerprinted `css/` and `images/` are `immutable` for a year; `fonts/` and `og/` for a
@@ -107,6 +109,4 @@ GitHub OIDC, sync to S3 in three passes with different `Cache-Control` values, a
   impact of a stolen credential. MFA and short-lived keys are the real protection.
 - Some CloudFront actions can't be scoped to a resource that doesn't exist yet, so that statement uses `Resource: "*"`.
 - The operator policy was derived from the Terraform code and its action names were checked against AWS's published
-  list; tune it by adding any action an `AccessDenied` error names.
-- Enabling AWS Organizations (which IAM Identity Center requires) has billing consequences for new accounts' free-tier
-  credits; check AWS's current terms before enabling it.
+  list. It has been used to apply the dev environment; tune it by adding any action an `AccessDenied` error names.

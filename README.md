@@ -3,9 +3,19 @@
 Personal site and articles on cloud architecture. Built with [Hugo](https://gohugo.io/) and hosted on AWS
 (private S3 bucket behind CloudFront), with DNS in Cloudflare and infrastructure defined in Terraform.
 
+This is a personal site, published openly as part of a portfolio, not as a template: the names, domains and IDs are
+specific to it. You're welcome to read it and reuse the code (see [Licence](#licence)). Typo fixes and corrections are
+welcome as issues or pull requests.
+
+## Requirements
+
+- **Hugo** (extended); CI builds with 0.166.0.
+- **Terraform** 1.11 or newer and the **AWS CLI**, to manage the infrastructure.
+- **Chrome** and **Python with Pillow**, only for the social-card and favicon scripts in `tools/`.
+
 ## Local preview
 
-Install Hugo (extended), then:
+With Hugo installed:
 
 ```bash
 hugo server -D     # http://localhost:1313, -D includes drafts
@@ -30,7 +40,7 @@ Set `draft: false` when an article is ready to go public. Things to edit: `hugo.
 | Drafts | hidden | visible |
 | Search engines | indexed | `noindex` and `robots.txt` disallow |
 
-Pull requests only build. Hugo settings for dev live in `config/dev/hugo.toml`.
+Pull requests and Dependabot's branches only build. Hugo settings for dev live in `config/dev/hugo.toml`.
 
 ## Social preview cards
 
@@ -63,9 +73,10 @@ terraform/
   envs/prod/      <domain> + www redirect, deploy role trusts main only
 ```
 
-Each folder is its own Terraform state, stored in a private S3 bucket (see below). Dev and prod use the same site module, so dev is a copy of prod with a
-login in front. The one difference in traffic path: dev goes through Cloudflare's proxy (needed for Access), prod
-goes straight to CloudFront. The deploy roles are separate: a feature branch can never write to the prod bucket.
+Each folder is its own Terraform state, stored in a private S3 bucket (see below). Dev and prod use the same site module,
+so dev is a copy of prod with a login in front. The one difference in traffic path: dev goes through Cloudflare's proxy
+(needed for Access), prod goes straight to CloudFront. The deploy roles are separate: a feature branch can never write
+to the prod bucket.
 
 How dev is locked down: Cloudflare Access asks people to sign in and only lets allowlisted emails through. Cloudflare
 then adds a secret `x-origin-verify` header to each request, and the CloudFront Function returns 403 without it, so the
@@ -86,8 +97,9 @@ table. The bucket should have:
 The identity you run Terraform with needs `s3:ListBucket` on the bucket and `s3:GetObject`, `s3:PutObject` and
 `s3:DeleteObject` on `kerim-kilic.com/*` (locking writes a `.tflock` object next to each state file).
 
-Step-by-step creation instructions and the bucket policy are in `terraform/state-bucket/`. The bucket name is not committed. Copy `terraform/backend.hcl.example` to `terraform/backend.hcl` (gitignored), set
-`bucket` and `region`, and pass it to every `terraform init`.
+Step-by-step creation instructions and the bucket policy are in `terraform/state-bucket/`. The bucket name is not
+committed. Copy `terraform/backend.hcl.example` to `terraform/backend.hcl` (gitignored), set `bucket` and `region`, and
+pass it to every `terraform init`.
 
 ### First-time setup
 
@@ -211,7 +223,7 @@ caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn'
 
 Roll back a bad content deploy by reverting the merge on `main`; the workflow redeploys the previous version.
 
-## License
+## Licence
 
 - The **code and configuration** are MIT licensed: see [`LICENSE`](LICENSE).
 - The **writing, photograph, personal data and diagram drawings** are all rights reserved: see

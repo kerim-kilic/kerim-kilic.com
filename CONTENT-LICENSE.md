@@ -6,7 +6,7 @@ cover the personal and editorial content below, which is Copyright (c) 2026 Keri
 - The articles and page text: `content/`
 - The personal data behind the pages (experience, skills, credentials): `data/`
 - The photograph: `assets/images/profile.jpg`, and every image that contains it (`static/og/`)
-- The diagram drawings: `assets/diagrams/` (the embedded AWS icons are covered by [AWS's terms](THIRD-PARTY-NOTICES.md))
+- The diagram drawings: `assets/diagrams/` (the embedded AWS icons belong to AWS and are used as its guidelines allow: see [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md))
 - The name, likeness and biography of Kerim Kilic
 
 You are welcome to read this repository, learn from it and reuse the code. Please don't republish the writing, the
