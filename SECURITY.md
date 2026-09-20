@@ -9,8 +9,7 @@ If you find something that looks like a security problem, please tell me private
 Examples: a leaked secret or credential in this repository, a misconfiguration in the Terraform or the workflow, or a way
 to reach the private dev site without signing in.
 
-- Use GitHub's private vulnerability reporting: the **Security** tab of this repository, then **Report a vulnerability**
-  (when it is enabled).
+- Use GitHub's private vulnerability reporting: the **Security** tab of this repository, then **Report a vulnerability**.
 - Or email [mail@kerim-kilic.com](mailto:mail@kerim-kilic.com).
 
 Please say what you found, where, and how to reproduce it. A simple proof is enough: please don't access other people's

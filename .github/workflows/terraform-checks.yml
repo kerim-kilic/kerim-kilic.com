@@ -1,16 +1,11 @@
 name: Terraform checks
 
 # Format and validity checks for the Terraform code. They need no cloud credentials and never plan or apply anything.
-# Runs only when something under terraform/ (or this file) changes.
+# They run on every pull request and push (no path filter), so they can be required checks on main: a path-filtered check
+# would never report on a pull request that doesn't touch terraform/ and would block its merge.
 on:
   pull_request:
-    paths:
-      - "terraform/**"
-      - ".github/workflows/terraform-checks.yml"
   push:
-    paths:
-      - "terraform/**"
-      - ".github/workflows/terraform-checks.yml"
 
 permissions:
   contents: read
