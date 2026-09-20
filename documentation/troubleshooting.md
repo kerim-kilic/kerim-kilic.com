@@ -8,8 +8,8 @@ account.
 | Symptom | Cause | Fix |
 |---|---|---|
 | `Not authorized to perform sts:AssumeRoleWithWebIdentity` at "Configure AWS credentials" | The role's trust policy doesn't match the token's subject. GitHub's subject now includes immutable numeric IDs: `repo:<owner>@<owner_id>/<repo>@<repo_id>:ref:<ref>` | Read the subject GitHub actually sent (below) and pin the IDs in the trust policy |
-| The same error, and the subject matches | A wrong role ARN in the `*_AWS_ROLE_ARN` variable, or a role that doesn't exist (AWS returns the same message) | Compare the variable with `terraform output deploy_role_arn` |
-| "Credentials could not be loaded", or an empty role | A repository variable is missing or misspelled (`DEV_`/`PROD_` prefix) | Check Settings, Secrets and variables, Actions, Variables |
+| The same error, and the subject matches | A wrong role ARN in the `*_AWS_ROLE_ARN` secret, or a role that doesn't exist (AWS returns the same message) | Compare the secret's value with `terraform output deploy_role_arn` (a secret can't be read back, so re-enter it) |
+| "Credentials could not be loaded", or an empty role | A repository variable or the role ARN secret is missing or misspelled (`DEV_`/`PROD_` prefix) | Check Settings, Secrets and variables, Actions, in both the Variables and Secrets tabs |
 | Deploy is green but the site shows the old content | The CloudFront invalidation hasn't finished, or the browser cached the page | Wait a minute and hard-refresh; check `aws cloudfront list-invalidations` |
 | The whole workflow is rejected as invalid YAML | An unquoted step name containing `: ` | Quote the step name |
 

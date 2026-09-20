@@ -17,6 +17,6 @@ output "cloudfront_domain_name" {
 }
 
 output "deploy_role_arn" {
-  description = "GitHub variable <ENV>_AWS_ROLE_ARN."
+  description = "GitHub secret <ENV>_AWS_ROLE_ARN (a secret so the account ID is masked in logs)."
   value       = module.site.deploy_role_arn
 }

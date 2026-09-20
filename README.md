@@ -169,20 +169,28 @@ cp terraform.tfvars.example terraform.tfvars
 terraform init -backend-config=../../backend.hcl && terraform plan && terraform apply
 ```
 
-Then add these as **repository variables** in GitHub (Settings > Secrets and variables > Actions > Variables),
-using each environment's `terraform output`:
+Then add these in GitHub (Settings > Secrets and variables > Actions), using each environment's `terraform output`.
+The values are identifiers, not credentials. The two role ARNs are **secrets** only so that GitHub masks them in the
+(public) logs, because an ARN contains the AWS account ID. Everything else is a plain **variable**.
+
+Variables (the *Variables* tab):
 
 | Variable | Value |
 |----------|-------|
 | `AWS_REGION` | the region you used (default `eu-central-1`) |
-| `DEV_AWS_ROLE_ARN` | `deploy_role_arn` from `envs/dev` |
 | `DEV_S3_BUCKET` | `bucket_name` from `envs/dev` |
 | `DEV_CLOUDFRONT_DISTRIBUTION_ID` | `cloudfront_distribution_id` from `envs/dev` |
-| `PROD_AWS_ROLE_ARN` | `deploy_role_arn` from `envs/prod` |
 | `PROD_S3_BUCKET` | `bucket_name` from `envs/prod` |
 | `PROD_CLOUDFRONT_DISTRIBUTION_ID` | `cloudfront_distribution_id` from `envs/prod` |
 
-Apply Terraform and set the variables **before** pushing, otherwise the first deploy job fails.
+Secrets (the *Secrets* tab):
+
+| Secret | Value |
+|--------|-------|
+| `DEV_AWS_ROLE_ARN` | `deploy_role_arn` from `envs/dev` |
+| `PROD_AWS_ROLE_ARN` | `deploy_role_arn` from `envs/prod` |
+
+Apply Terraform and set the variables and secrets **before** pushing, otherwise the first deploy job fails.
 
 ### Sharing dev with someone
 
@@ -209,7 +217,7 @@ caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn'
 1. Applying prod replaces whatever the domain served before with the new site, which is empty until the first deploy.
    Remove any old DNS records for the apex and `www` first, and do steps 2 to 4 back-to-back so that gap lasts only a
    couple of minutes.
-2. `terraform apply` in `envs/prod`, then set the `PROD_*` repository variables.
+2. `terraform apply` in `envs/prod`, then set the `PROD_*` repository variables and the `PROD_AWS_ROLE_ARN` secret.
 3. Merge `dev` into `main`. The workflow deploys prod.
 4. Run the smoke test:
 

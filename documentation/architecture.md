@@ -86,8 +86,9 @@ GitHub OIDC, sync to S3 in three passes with different `Cache-Control` values, a
 - **Actions stay current.** Dependabot proposes updates to the GitHub Actions the workflow uses (weekly, grouped). Its
   pull requests target `dev`, so a new version is deployed and tested there before it can reach `main`. Its own branches
   only build; they never deploy.
-- **Repository variables** (not secrets) select the target: `AWS_REGION`, and `DEV_` / `PROD_` variants of the role ARN,
-  bucket name and distribution ID.
+- **Repository variables** select the target: `AWS_REGION`, and the `DEV_` / `PROD_` bucket name and distribution ID. The
+  `DEV_` / `PROD_` role ARN is a repository **secret**, only so that it is masked in public logs (an ARN contains the AWS
+  account ID). None of these values is a credential.
 - **Cache policy by file class:** fingerprinted `css/` and `images/` are `immutable` for a year; `fonts/` and `og/` for a
   day; everything else (HTML, sitemap, feeds) is revalidated by browsers and cached at the edge (`s-maxage`) until the next
   invalidation.
@@ -102,7 +103,7 @@ GitHub OIDC, sync to S3 in three passes with different `Cache-Control` values, a
 | One module, two environments | Test the pipeline and review content before touching the production domain |
 | Cloudflare Access plus a secret header for dev | The operator's IP is dynamic, so an IP allowlist would lock them out and can't serve reviewers; per-person access and revocation; DNS is already in Cloudflare |
 | Deploy roles per environment, trust defined in Terraform | A feature branch can never write to the production bucket, and the rule is enforced in AWS, not in a GitHub setting |
-| `DEV_` / `PROD_` repository variables instead of GitHub Environments | Keeps the OIDC subject as `ref:refs/heads/...` so the trust conditions stay in code |
+| `DEV_` / `PROD_` repository variables and secrets instead of GitHub Environments | Keeps the OIDC subject as `ref:refs/heads/...` so the trust conditions stay in code |
 | State in S3 with native locking | No extra lock table; the bucket can be shared by other projects through per-project key prefixes |
 | Test production right after go-live | Covers the dev/prod difference cheaply |
 
