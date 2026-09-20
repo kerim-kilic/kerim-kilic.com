@@ -41,6 +41,7 @@ module "site" {
   github_repository_id = var.github_repository_id
   deploy_ref_patterns  = ["refs/heads/*"]
 
-  # The login must exist before the site becomes reachable.
-  depends_on = [module.access]
+  # No module-level depends_on on module.access: it would defer every data source in this module to apply time
+  # whenever the allowlist changes. The login still comes first, because CloudFront only accepts requests that
+  # carry the origin header, and the ruleset that adds it waits for the Access application.
 }
