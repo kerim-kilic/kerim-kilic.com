@@ -5,7 +5,7 @@ Personal site and articles on cloud architecture. Built with [Hugo](https://gohu
 
 This is a personal site, published openly as part of a portfolio, not as a template: the names, domains and IDs are
 specific to it. You're welcome to read it and reuse the code (see [Licence](#licence)). Typo fixes and corrections are
-welcome as issues or pull requests.
+welcome as issues or pull requests. To report a security problem, see [`SECURITY.md`](SECURITY.md).
 
 ## Requirements
 
@@ -194,6 +194,8 @@ Google, or ask for a one-time code sent to that address. To revoke someone, remo
 - Terraform runs from your machine, not from GitHub Actions: the credentials it needs (broad AWS access, a Cloudflare
   token that can edit Access and rules) don't belong in a public repo's secrets, and Terraform creates the roles the
   workflow itself uses.
+- Terraform changes are checked on every pull request and push (formatting and validation, no credentials) by
+  `.github/workflows/terraform-checks.yml`. Nothing is planned or applied in CI.
 - Only the OIDC provider is shared between environments, and it lives in `envs/shared` so destroying dev can't break prod.
 - The dev apply changes Cloudflare Access and the two rulesets in your zone, none of which prod needs. Prod only
   writes DNS records.

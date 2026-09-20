@@ -50,6 +50,8 @@ terraform/
 - Terraform runs from a workstation, not from CI. The credentials it needs are powerful (broad AWS access, a Cloudflare
   token that can edit Access and rules), Cloudflare has no OIDC federation so its token would have to be a long-lived
   secret in GitHub, and CI logs on a public repository expose account IDs and ARNs.
+- Terraform code is checked in CI (`terraform fmt -check` and `terraform validate` for each stack) on every pull request
+  and push. The checks need no credentials, and nothing is planned or applied there.
 - Long-lived access keys are avoided: a key is created at the start of a working session and deleted at the end.
 
 ## Dev access control

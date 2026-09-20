@@ -1,0 +1,58 @@
+name: Terraform checks
+
+# Format and validity checks for the Terraform code. They need no cloud credentials and never plan or apply anything.
+# Runs only when something under terraform/ (or this file) changes.
+on:
+  pull_request:
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform-checks.yml"
+  push:
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform-checks.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: terraform-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "^1.11.0"
+          terraform_wrapper: false
+
+      - name: Check formatting
+        run: terraform fmt -check -recursive -diff terraform
+
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [shared, dev, prod]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "^1.11.0"
+          terraform_wrapper: false
+
+      - name: Initialise (no backend)
+        working-directory: terraform/envs/${{ matrix.stack }}
+        run: terraform init -backend=false -input=false
+
+      - name: Validate
+        working-directory: terraform/envs/${{ matrix.stack }}
+        run: terraform validate

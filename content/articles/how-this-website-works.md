@@ -136,7 +136,7 @@ State is stored in a private, versioned S3 bucket, with one key per environment.
 
 ## What I would change next
 
-- **Terraform in CI.** I still run `terraform apply` from my laptop, because the credentials it needs are too powerful to hand to a public repository's workflows. The next step is plans on pull requests and applies on merge, using a separate, narrowly scoped role.
+- **Terraform in CI, beyond the checks.** Pull requests already get format and validation checks, which need no credentials. But I still run `terraform plan` and `apply` from my laptop, because the credentials they need are too powerful to hand to a public repository's workflows. The next step is plans on pull requests and applies on merge, using a separate, narrowly scoped role.
 - **A Content-Security-Policy.** The managed security-headers policy covers HSTS, content-type sniffing, framing and referrer policy, but not CSP. The site is static and self-hosted, fonts included, so a strict CSP should be easy to add.
 - **Pin the GitHub Actions to commit SHAs.** They follow major-version tags and Dependabot proposes updates, but a maintainer can move a tag and nobody can move a commit SHA.
 - **Logging.** There are no access logs or alerts yet.
