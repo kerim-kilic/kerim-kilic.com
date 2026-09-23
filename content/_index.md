@@ -1,7 +1,7 @@
 ---
 title: "Home"
 headline: "I design and build cloud platforms that are secure, reliable and simple to run."
-lead: "I'm Kerim, a Lead Cloud Engineer in Barcelona working on AWS and multi-cloud platforms: governance, identity, networking and automation. Here I write about cloud architecture and share what I've built."
+lead: "I'm Kerim, a Lead Cloud Engineer working on AWS and multi-cloud platforms: governance, identity, networking and automation. Here I write about cloud architecture and share what I've built."
 focus:
   - title: "Multi-account governance"
     text: "Organisation structure, guardrails and single sign-on for large multi-account AWS estates."

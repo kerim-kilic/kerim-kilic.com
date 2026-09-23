@@ -2,9 +2,10 @@
 {{- $strip := `^https://(www\.)?` -}}
 <ul class="contact-links">
   <li>
-    <a href="mailto:{{ site.Params.email }}">
+    {{- $email := partial "email.html" . }}
+    <a {{ printf `href="mailto:%s"` $email | safeHTMLAttr }}>
       {{ partial "icon.html" "envelope" }}
-      <span><small>Email</small>{{ site.Params.email }}</span>
+      <span><small>Email</small>{{ $email | safeHTML }}</span>
     </a>
   </li>
   <li>

@@ -78,6 +78,7 @@ echo; echo "Cloudflare rewrites"
 contact=$(body "$url/contact/")
 expect "contact page has a mailto link" 'grep -q "mailto:" <<<"$contact"'
 expect "email address was not obfuscated by Cloudflare" '! grep -q "email-protection" <<<"$contact"'
+expect "email address is not in plain text" '! grep -qE "[a-z]+@${host#www.}" <<<"$contact"'
 
 if [[ "$scheme" == https ]]; then
   echo; echo "HTTPS, headers and caching"

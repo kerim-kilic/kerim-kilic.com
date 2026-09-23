@@ -4,7 +4,7 @@ description: "Background, experience and approach of Kerim Kilic, Lead Cloud Eng
 showPhoto: true
 ---
 
-I'm Kerim, a Lead Cloud Engineer based in Barcelona. I work on the core public cloud platform of a global information services company: the AWS, Azure and Google Cloud foundations that other engineering teams build on. AWS is where I'm deepest.
+I'm Kerim, a Lead Cloud Engineer. I work on the core public cloud platform of a global information services company: the AWS, Azure and Google Cloud foundations that other engineering teams build on. AWS is where I'm deepest.
 
 ## Background
 

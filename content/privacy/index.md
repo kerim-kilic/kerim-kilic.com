@@ -25,7 +25,7 @@ The links to LinkedIn, GitHub and Credly lead to sites with their own privacy po
 
 ## Who is responsible
 
-Kerim Kilic, [{{< param "email" >}}](mailto:{{< param "email" >}}). If I add analytics or anything else that collects data, I'll update this page first.
+Kerim Kilic, {{< email >}}. If I add analytics or anything else that collects data, I'll update this page first.
 
 Last updated: 20 September 2026.
 

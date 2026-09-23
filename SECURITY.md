@@ -10,7 +10,7 @@ Examples: a leaked secret or credential in this repository, a misconfiguration i
 to reach the private dev site without signing in.
 
 - Use GitHub's private vulnerability reporting: the **Security** tab of this repository, then **Report a vulnerability**.
-- Or email [mail@kerim-kilic.com](mailto:mail@kerim-kilic.com).
+- Or email [hello@kerim-kilic.com](mailto:hello@kerim-kilic.com).
 
 Please say what you found, where, and how to reproduce it. A simple proof is enough: please don't access other people's
 data, disrupt the site, or test beyond what is needed to show the problem.

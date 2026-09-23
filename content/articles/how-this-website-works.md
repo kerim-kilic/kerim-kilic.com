@@ -141,4 +141,4 @@ State is stored in a private, versioned S3 bucket, with one key per environment.
 - **Pin the GitHub Actions to commit SHAs.** They follow major-version tags and Dependabot proposes updates, but a maintainer can move a tag and nobody can move a commit SHA.
 - **Logging.** There are no access logs or alerts yet.
 
-That's the whole thing, and it's deliberately boring. If you spot something I got wrong, or you'd have done it differently, I'd like to hear about it. You'll find me on [LinkedIn](https://www.linkedin.com/in/kerim-kilic/) or by [email](mailto:mail@kerim-kilic.com).
+That's the whole thing, and it's deliberately boring. If you spot something I got wrong, or you'd have done it differently, I'd like to hear about it. You'll find me on [LinkedIn](https://www.linkedin.com/in/kerim-kilic/) or by {{< email "email" >}}.

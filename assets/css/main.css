@@ -110,7 +110,7 @@ body.home::before {
 .eyebrow { color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85rem; margin: 0 0 0.75rem; }
 .lead { font-size: 1.25rem; color: var(--muted); margin: 0 0 1.5rem; }
 .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; }
-.btn { display: inline-block; background: var(--accent); color: var(--accent-text); padding: 0.65rem 1.2rem; border-radius: var(--radius); font-weight: 600; text-decoration: none; border: 1px solid var(--accent); }
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent); color: var(--accent-text); padding: 0.65rem 1.2rem; border-radius: var(--radius); font-weight: 600; text-decoration: none; border: 1px solid var(--accent); }
 .btn:hover { filter: brightness(1.08); }
 .btn.ghost { background: transparent; color: var(--accent); }
 

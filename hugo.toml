@@ -9,7 +9,7 @@ enableRobotsTXT = true
 [params]
   tagline = "Cloud engineer & architect"
   description = "Cloud engineer and architect. Articles on cloud architecture, and a portfolio of platforms I've designed and built."
-  email = "mail@kerim-kilic.com"
+  email = "hello@kerim-kilic.com"
   linkedin = "https://www.linkedin.com/in/kerim-kilic/"
   github = "https://github.com/kerim-kilic"
 
@@ -30,6 +30,10 @@ enableRobotsTXT = true
     name = "Contact"
     pageRef = "/contact"
     weight = 40
+
+[minify]
+  # Keep HTML unminified: the minifier decodes the character references that hide the email address.
+  disableHTML = true
 
 [markup]
   [markup.highlight]
