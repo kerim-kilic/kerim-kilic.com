@@ -249,5 +249,5 @@ Roll back a bad content deploy by reverting the merge on `main`; the workflow re
   (CloudFront, S3, IAM), embedded unmodified and scaled only. AWS, Amazon S3, Amazon CloudFront and AWS Identity and
   Access Management are trademarks of Amazon.com, Inc. or its affiliates. This site is not affiliated with or endorsed
   by AWS.
-- Fonts: Inter and Space Grotesk under the SIL Open Font License; icons: Bootstrap Icons (MIT). Licence texts and
+- Font: Inter under the SIL Open Font License (the favicon "K" is outlined from Space Grotesk, same licence); icons: Bootstrap Icons (MIT). Licence texts and
   attribution are in [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md).

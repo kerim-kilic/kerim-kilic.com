@@ -2,30 +2,30 @@
 - period: "2026 – present"
   role: "Lead Cloud Engineer"
   org: "Clarivate"
-  text: "Own the architecture and technical direction of the core public cloud platform across AWS, Azure and Google Cloud. Lead the network, identity and cost-optimisation workstreams."
+  text: "Architecture and technical direction for the core public cloud platform on AWS, Azure and Google Cloud. Leading the networking, identity and cost work."
   tags: [AWS, Azure, Google Cloud, Terraform]
 - period: "2025 – 2026"
   role: "Senior Cloud Engineer"
   org: "Clarivate"
-  text: "Led the move of the organisation's AWS accounts to centralised single sign-on. Built the pipeline that manages shared network infrastructure as code, and improved tagging compliance and observability."
+  text: "Moved the organisation's AWS accounts to central single sign-on. Built the pipeline that manages the shared network as code, and improved tagging and monitoring."
   tags: [AWS, Terraform, GitHub Actions, Networking]
 - period: "2024 – 2025"
   role: "Cloud Engineer"
   org: "Clarivate"
-  text: "Designed a hybrid and multi-cloud network strategy connecting AWS, Azure and on-premises environments. Ran the single sign-on pilot and automated cloud service deployments in Terraform."
+  text: "Designed the network strategy that connects AWS, Azure and on-premises. Ran the single sign-on pilot and wrote the Terraform for new cloud services."
   tags: [Terraform, Azure, Networking, Identity]
 - period: "2022 – 2024"
   role: "Associate Cloud Engineer"
   org: "Clarivate"
-  text: "Built and extended the AWS account management pipeline with Terraform modules for networking and access roles. Automated routine account and fleet management with Python on AWS Lambda."
+  text: "Extended the AWS account pipeline with Terraform modules for networking and access roles. Automated routine account and fleet tasks with Python on Lambda."
   tags: [Terraform, Python, Lambda, AWS]
 - period: "2021 – 2022"
   role: "Data Analyst"
   org: "Nowi"
-  text: "Built data pipelines and dashboards in R and SQL for commercial stakeholders."
+  text: "Built data pipelines and dashboards in R and SQL for the commercial team."
   tags: [R, SQL]
 - period: "2018 – 2021"
   role: "Electronics engineering"
   org: "Nowi · Momo Medical · Inrada"
-  text: "Application and electrical engineering on ultra-low-power IoT hardware and electronics for a certified medical device."
+  text: "Electrical and application engineering on ultra-low-power IoT hardware, and electronics for a certified medical device."
   tags: [IoT, BLE, Embedded]

@@ -1,14 +1,13 @@
+# Shown on the home page as a grid of equal columns. Keep every group the same length (five items) so the columns line up.
 - group: AWS
-  items: [Organizations & SCPs, IAM Identity Center, Transit Gateway, VPC & PrivateLink, Direct Connect, Route 53, Lambda, ECS & Fargate]
-- group: Multi-cloud
-  items: [Azure, Google Cloud, Entra ID federation, Azure Virtual WAN]
-- group: Infrastructure as code & automation
-  items: [Terraform, OpenTofu, GitHub Actions, Jenkins, Python (boto3), Bash, PowerShell]
+  items: [Organizations, IAM Identity Center, Lambda, ECS & Fargate, Route 53]
 - group: Networking
-  items: [Hub-and-spoke at scale, Centralised egress, Hybrid connectivity, Routing & segmentation, VPC Lattice, IP address management]
+  items: [Transit Gateway, VPC & PrivateLink, Direct Connect, VPC Lattice, IP address management]
+- group: Multi-cloud
+  items: [Azure, Google Cloud, Entra ID federation, Azure Virtual WAN, Hybrid connectivity]
+- group: Code & pipelines
+  items: [Terraform, OpenTofu, GitHub Actions, Jenkins, Python (boto3)]
 - group: Security & governance
-  items: [Guardrails with SCPs, Least-privilege access, Compliance reporting, Tagging governance, Cloud Custodian]
-- group: Migrations
-  items: [On-premises to cloud, Cloud-to-cloud, Consolidation & decommissioning]
-- group: Observability & FinOps
-  items: [Datadog, CloudWatch, Cost analysis & optimisation]
+  items: [Guardrails with SCPs, Least-privilege access, Tagging governance, Compliance reporting, Cloud Custodian]
+- group: Operations & migrations
+  items: [Datadog, CloudWatch, Cost optimisation, Cloud migrations, Consolidation & decommissioning]

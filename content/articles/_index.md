@@ -1,4 +1,4 @@
 ---
 title: "Articles"
-description: "Notes on cloud architecture: design decisions, trade-offs and lessons learned."
+description: "Write-ups of things I've built in the cloud, and why I built them that way."
 ---

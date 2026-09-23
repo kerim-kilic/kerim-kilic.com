@@ -1,14 +1,14 @@
 ---
 title: "Home"
-headline: "I design and build cloud platforms that are secure, reliable and simple to run."
-lead: "I'm Kerim, a Lead Cloud Engineer working on AWS and multi-cloud platforms: governance, identity, networking and automation. Here I write about cloud architecture and share what I've built."
+headline: "I build the cloud foundations that other engineering teams run on."
+lead: "I'm Kerim, a Lead Cloud Engineer. Most of my work is on AWS, with some Azure and Google Cloud: account structure, identity, networking and the Terraform that holds it together. On this site I write about what I've built and the problems I ran into."
 focus:
   - title: "Multi-account governance"
-    text: "Organisation structure, guardrails and single sign-on for large multi-account AWS estates."
-  - title: "Hybrid & multi-cloud networking"
-    text: "Hub-and-spoke connectivity, routing and segmentation across AWS, Azure and on-premises environments."
-  - title: "Infrastructure as code & pipelines"
-    text: "Terraform and OpenTofu delivered through GitHub Actions, so accounts and networks are provisioned from code."
-  - title: "Migrations & cost optimisation"
-    text: "Cloud migrations and consolidation, and cutting spend through better governance."
+    text: "How AWS accounts are organised, which guardrails apply to them, and how people sign in to them once there are too many to manage by hand."
+  - title: "Networking across clouds"
+    text: "Hub-and-spoke networks that connect AWS, Azure and on-premises sites, and the routing and segmentation between them."
+  - title: "Infrastructure as code"
+    text: "Terraform and OpenTofu, run from GitHub Actions. New accounts and network changes go through a pull request like any other code."
+  - title: "Migrations and cost"
+    text: "Moving workloads into the cloud or between clouds, and cleaning up the spend that builds up when nobody owns it."
 ---

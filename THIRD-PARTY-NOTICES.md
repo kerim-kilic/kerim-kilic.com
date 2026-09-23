@@ -5,15 +5,16 @@ This repository redistributes the following third-party material. It is **not** 
 
 ## Fonts (SIL Open Font License 1.1)
 
-Self-hosted Latin subsets of two variable fonts, obtained through [Fontsource](https://fontsource.org). The licence texts
-sit next to the font files and are served with them.
+The site serves a self-hosted Latin subset of the Inter variable font, obtained through [Fontsource](https://fontsource.org).
+The licence texts sit in `static/fonts/` and are served with the site.
 
 | Font | Copyright | Licence text |
 |------|-----------|--------------|
 | Inter | Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter) | [`static/fonts/OFL-Inter.txt`](static/fonts/OFL-Inter.txt) |
 | Space Grotesk | Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk) | [`static/fonts/OFL-Space-Grotesk.txt`](static/fonts/OFL-Space-Grotesk.txt) |
 
-The "K" in the favicon is an outline taken from Space Grotesk Bold and is distributed under the same licence.
+Space Grotesk is not served as a font. The "K" in the favicon is an outline taken from Space Grotesk Bold and is
+distributed under the same licence.
 
 ## Icons: Bootstrap Icons (MIT)
 

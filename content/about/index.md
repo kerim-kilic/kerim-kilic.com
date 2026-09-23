@@ -1,18 +1,20 @@
 ---
 title: "About"
-description: "Background, experience and approach of Kerim Kilic, Lead Cloud Engineer."
+description: "Kerim Kilic, Lead Cloud Engineer: background, experience and how I work."
 showPhoto: true
 ---
 
-I'm Kerim, a Lead Cloud Engineer. I work on the core public cloud platform of a global information services company: the AWS, Azure and Google Cloud foundations that other engineering teams build on. AWS is where I'm deepest.
+I'm Kerim, a Lead Cloud Engineer. I work on the public cloud platform of a large information services company, the shared AWS, Azure and Google Cloud setup that the product teams build on. Most of my time goes into AWS.
 
 ## Background
 
-I started in electronics engineering, working on IoT hardware and electronics for a certified medical device. After a spell in data analytics I moved into cloud engineering in 2022, and I've progressed from Associate to Lead Cloud Engineer since.
+I studied electrical engineering and started out in hardware: low-power IoT devices, and electronics for a certified medical device. After a year in data analytics I moved into cloud engineering in 2022. I joined as an associate engineer and I'm now the lead.
 
 ## How I work
 
-I like infrastructure that is boring in the best way: defined in code, reviewed like any other change, and simple enough that the next engineer can follow it without me. I default to least privilege and to short-lived credentials over long-lived keys, and I write down why a decision was made, not only what was decided. I also enjoy explaining how things work, which is a large part of why I write here.
+I try to keep infrastructure dull. It lives in code, changes go through review, and it should be simple enough for the next person to pick up without having to ask me. Roles get the least access that works, and I'd rather use short-lived credentials than keys that sit around for years.
+
+When I make a decision I write down why, because that's the part people forget first. Writing things down is also most of the reason this site exists.
 
 ## Experience
 
@@ -27,4 +29,4 @@ I like infrastructure that is boring in the best way: defined in code, reviewed 
 
 ## Get in touch
 
-If you'd like to talk through an architecture question or compare notes, [get in touch]({{< relref "/contact" >}}). This website is a small worked example of how I build things: [how it's built]({{< relref "/portfolio/this-website" >}}).
+If you'd like to talk about any of this, [get in touch]({{< relref "/contact" >}}). This site is also a small example of how I work, and [here's how it's built]({{< relref "/portfolio/this-website" >}}).

@@ -42,13 +42,13 @@
   {{ range $articles }}
     {{ partial "article-item.html" . }}
   {{ else }}
-    <p class="muted">Articles on cloud architecture are coming soon.</p>
+    <p class="muted">No articles yet. The first one is nearly done.</p>
   {{ end }}
 </section>
 
 <section class="cta">
-  <h2>Want to talk cloud architecture?</h2>
-  <p>I'm always happy to compare notes, hear how you've solved something, or take questions about what I've written.</p>
-  <p class="actions"><a class="btn" href="{{ "contact/" | relURL }}">Say hello</a></p>
+  <h2>Get in touch</h2>
+  <p>Working on something similar, or have a question about one of the articles? Send me a message.</p>
+  <p class="actions"><a class="btn" href="{{ "contact/" | relURL }}">Contact me</a></p>
 </section>
 {{ end }}

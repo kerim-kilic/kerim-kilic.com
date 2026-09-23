@@ -1,4 +1,4 @@
 ---
 title: "Portfolio"
-description: "Selected platforms and projects."
+description: "Things I've built, with notes on how they work."
 ---

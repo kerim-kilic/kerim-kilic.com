@@ -13,11 +13,11 @@ This article walks through how it fits together, the decisions behind it, and th
 
 ## What I wanted
 
-- **Cheap and low maintenance.** Nothing to patch, nothing to scale, nothing to be paged for.
-- **HTTPS on my own domain**, with sensible security headers.
-- **Everything as code**, so the whole thing can be rebuilt from the repository.
-- **Publishing is a `git push`**, with no long-lived AWS credentials sitting in GitHub.
-- **Safe to make public.** No secrets in the repo, and a deploy role that can't do much damage if it were ever misused.
+- It should cost next to nothing and need no maintenance: no servers to patch or scale.
+- HTTPS on my own domain, with sensible security headers.
+- All of it in code, so I can rebuild it from the repository.
+- Publishing should be a `git push`, without long-lived AWS keys stored in GitHub.
+- Safe to make public: no secrets in the repo, and a deploy role that can't do much damage if someone misused it.
 
 ## The request path
 
@@ -78,7 +78,7 @@ The records that point the domain at CloudFront are set to DNS only, so traffic 
 
 The workflow builds the site on every push and pull request. Pushes to `main` deploy to production; the diagram shows that path. Instead of an IAM user whose access keys sit in GitHub secrets, it uses OpenID Connect. GitHub issues each run a signed token describing where the run came from, AWS STS checks that token against the role's trust policy, and hands back credentials that expire (after an hour by default).
 
-The trust policy is where the security lives:
+The part that matters is the role's trust policy:
 
 ```hcl
 condition {
@@ -90,7 +90,7 @@ condition {
 
 For production, `deploy_ref_patterns` is `["refs/heads/main"]`, so only the `main` branch of this repository can assume the role. The role's permissions are small too: list the bucket, put and delete objects in it, and create an invalidation on this one distribution. Even if the role were misused, the worst outcome is a defaced website, not a compromised AWS account.
 
-Three practical consequences:
+Three things I learnt setting this up:
 
 - **GitHub now identifies the repository by numeric IDs.** My first deploy failed with `Not authorized to perform sts:AssumeRoleWithWebIdentity`, and the trust policy looked right. CloudTrail showed why: the token's subject was `repo:<owner>@<owner id>/<repo>@<repo id>:ref:refs/heads/dev`, not the older `repo:<owner>/<repo>:ref:...` I had written. Pinning the immutable IDs is the better fix than loosening the pattern with wildcards, because it stops someone who later recreates an account or repository with the same name from inheriting the trust. CloudTrail records the failed attempt, including the subject GitHub sent, so it's the quickest place to look.
 - **The repository name is baked into the trust policy.** I settled the name before the first `terraform apply`; renaming it afterwards would break deployments until the policy is updated.
@@ -136,9 +136,9 @@ State is stored in a private, versioned S3 bucket, with one key per environment.
 
 ## What I would change next
 
-- **Terraform in CI, beyond the checks.** Pull requests already get format and validation checks, which need no credentials. But I still run `terraform plan` and `apply` from my laptop, because the credentials they need are too powerful to hand to a public repository's workflows. The next step is plans on pull requests and applies on merge, using a separate, narrowly scoped role.
-- **A Content-Security-Policy.** The managed security-headers policy covers HSTS, content-type sniffing, framing and referrer policy, but not CSP. The site is static and self-hosted, fonts included, so a strict CSP should be easy to add.
-- **Pin the GitHub Actions to commit SHAs.** They follow major-version tags and Dependabot proposes updates, but a maintainer can move a tag and nobody can move a commit SHA.
-- **Logging.** There are no access logs or alerts yet.
+- Run Terraform in CI, not only the checks. Pull requests already get format and validation checks, which need no credentials. But I still run `terraform plan` and `apply` from my laptop, because the credentials they need are too powerful to hand to a public repository's workflows. The next step is plans on pull requests and applies on merge, using a separate, narrowly scoped role.
+- Add a Content-Security-Policy. The managed security-headers policy covers HSTS, content-type sniffing, framing and referrer policy, but not CSP. The site is static and self-hosted, fonts included, so a strict CSP should be easy to add.
+- Pin the GitHub Actions to commit SHAs. They follow major-version tags and Dependabot proposes updates, but a maintainer can move a tag and nobody can move a commit SHA.
+- Logging. There are no access logs or alerts yet.
 
-That's the whole thing, and it's deliberately boring. If you spot something I got wrong, or you'd have done it differently, I'd like to hear about it. You'll find me on [LinkedIn](https://www.linkedin.com/in/kerim-kilic/) or by {{< email "email" >}}.
+That's all of it. If you spot a mistake, or you'd have done something differently, I'd like to hear about it. You can reach me on [LinkedIn](https://www.linkedin.com/in/kerim-kilic/) or by {{< email "email" >}}.

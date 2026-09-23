@@ -8,7 +8,7 @@ enableRobotsTXT = true
 
 [params]
   tagline = "Cloud engineer & architect"
-  description = "Cloud engineer and architect. Articles on cloud architecture, and a portfolio of platforms I've designed and built."
+  description = "Kerim Kilic, cloud engineer. Articles about AWS, Terraform and cloud networking, and notes on things I've built."
   email = "hello@kerim-kilic.com"
   linkedin = "https://www.linkedin.com/in/kerim-kilic/"
   github = "https://github.com/kerim-kilic"

@@ -32,4 +32,4 @@ Last updated: 20 September 2026.
 ## Credits
 
 - The diagrams use icons from the [AWS Architecture Icons](https://aws.amazon.com/architecture/icons/) (Amazon CloudFront, Amazon S3 and AWS Identity and Access Management), unmodified and scaled only, as AWS permits for architecture diagrams. AWS, Amazon S3, Amazon CloudFront and AWS Identity and Access Management are trademarks of Amazon.com, Inc. or its affiliates. This site is not affiliated with or endorsed by AWS.
-- Fonts: Inter and Space Grotesk, under the SIL Open Font Licence. Icons: Bootstrap Icons, under the MIT licence. The full notices are in the site's source repository on GitHub.
+- Font: Inter, under the SIL Open Font Licence (the "K" in the site icon is drawn from Space Grotesk, under the same licence). Icons: Bootstrap Icons, under the MIT licence. The full notices are in the site's source repository on GitHub.

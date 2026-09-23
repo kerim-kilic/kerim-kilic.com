@@ -2,7 +2,7 @@
   {{ range hugo.Data.skills }}
   <div>
     <h3>{{ .group }}</h3>
-    <ul class="tags">
+    <ul>
       {{ range .items }}<li>{{ . }}</li>{{ end }}
     </ul>
   </div>
