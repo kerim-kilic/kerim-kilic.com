@@ -1,6 +1,6 @@
 ---
 title: "About"
-description: "Kerim Kilic, Lead Cloud Engineer: background, experience and how I work."
+description: "Kerim Kilic, Lead Cloud Engineer: background and how I work."
 showPhoto: true
 ---
 
@@ -16,10 +16,6 @@ I try to keep infrastructure dull. It lives in code, changes go through review, 
 
 When I make a decision I write down why, because that's the part people forget first. Writing things down is also most of the reason this site exists.
 
-## Experience
-
-{{< experience >}}
-
 ## Education and certifications
 
 - AWS Certified Solutions Architect – Associate
@@ -29,4 +25,6 @@ When I make a decision I write down why, because that's the part people forget f
 
 ## Get in touch
 
-If you'd like to talk about any of this, [get in touch]({{< relref "/contact" >}}). This site is also a small example of how I work, and [here's how it's built]({{< relref "/portfolio/this-website" >}}).
+My full work history is on LinkedIn, and that's also the easiest place to connect. For anything else, [send me a message]({{< relref "/contact" >}}). This site is also a small example of how I work, and [here's how it's built]({{< relref "/portfolio/this-website" >}}).
+
+{{< linkedin-button >}}

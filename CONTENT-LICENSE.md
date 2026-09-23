@@ -4,7 +4,7 @@ The MIT licence in [`LICENSE`](LICENSE) covers the **source code and configurati
 cover the personal and editorial content below, which is Copyright (c) 2026 Kerim Kilic, **all rights reserved**:
 
 - The articles and page text: `content/`
-- The personal data behind the pages (experience, skills, credentials): `data/`
+- The personal data behind the pages (skills, credentials): `data/`
 - The photograph: `assets/images/profile.jpg`, and every image that contains it (`static/og/`)
 - The diagram drawings: `assets/diagrams/` (the embedded AWS icons belong to AWS and are used as its guidelines allow: see [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md))
 - The name, likeness and biography of Kerim Kilic
