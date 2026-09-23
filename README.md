@@ -231,6 +231,7 @@ caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn'
 5. By hand: open the site on a real phone, and paste an article URL into LinkedIn's Post Inspector
    (`linkedin.com/post-inspector`) to check the preview card and refresh LinkedIn's cache.
 6. In GitHub, make `main` the default branch and require a pull request to change it.
+7. In the repository's About box (the gear icon on the repository page), set the **Website** to `https://kerim-kilic.com`.
 
 Roll back a bad content deploy by reverting the merge on `main`; the workflow redeploys the previous version.
 
