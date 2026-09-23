@@ -92,13 +92,13 @@ body.home::before {
   mask-image: linear-gradient(to bottom, #000 25%, transparent);
 }
 .hero { display: grid; grid-template-columns: minmax(0, var(--measure)) auto; align-items: center; justify-content: space-between; gap: 2rem; padding-block: 2rem 1rem; }
-.portrait { border-radius: 50%; object-fit: cover; aspect-ratio: 1; border: 1px solid var(--border); background: var(--surface); }
-.hero-photo { width: 10rem; height: 10rem; }
-.about-photo { float: right; width: 11rem; height: 11rem; margin: 0.25rem 0 1rem 1.5rem; }
+.portrait { border-radius: 14px; object-fit: cover; aspect-ratio: 4 / 5; border: 1px solid var(--border); background: var(--surface); }
+.hero-photo { width: 12.5rem; height: auto; }
+.about-photo { float: right; width: 11rem; height: auto; margin: 0.25rem 0 1rem 1.5rem; }
 @media (max-width: 40rem) {
   .hero { grid-template-columns: 1fr; gap: 1.25rem; }
-  .hero-photo { order: -1; width: 7rem; height: 7rem; }
-  .about-photo { width: 8rem; height: 8rem; margin-left: 1rem; }
+  .hero-photo { order: -1; width: 8rem; }
+  .about-photo { width: 8rem; margin-left: 1rem; }
 }
 .eyebrow, .credentials dt, .timeline .period, .contact-links small { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 .eyebrow { color: var(--accent); margin: 0 0 0.75rem; }
