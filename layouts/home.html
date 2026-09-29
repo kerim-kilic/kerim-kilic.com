@@ -1,7 +1,7 @@
 {{ define "main" }}
 <section class="hero">
   <div class="hero-text">
-    <p class="eyebrow">{{ site.Params.tagline }}</p>
+    <p class="byline"><strong>{{ site.Title }}</strong> · {{ site.Params.role }}</p>
     <h1>{{ .Params.headline }}</h1>
     <p class="lead">{{ .Params.lead }}</p>
     <p class="actions">
@@ -15,18 +15,18 @@
 {{ partial "credentials.html" . }}
 
 {{ with site.GetPage "/about" }}
-<section id="about" class="prose">
+<section id="about">
   <h2>About</h2>
-  {{ .Content }}
+  <div class="about-body prose">{{ .Content }}</div>
 </section>
 {{ end }}
 
 {{ with .Params.focus }}
 <section>
   <h2>What I do</h2>
-  <div class="grid">
+  <div class="focus">
     {{ range . }}
-    <div class="card">
+    <div>
       <h3>{{ .title }}</h3>
       <p>{{ .text }}</p>
     </div>
