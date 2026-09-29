@@ -7,7 +7,6 @@ enableRobotsTXT = true
   pagerSize = 10
 
 [params]
-  tagline = "Cloud engineer & architect"
   role = "Lead Cloud Engineer"
   description = "Kerim Kilic, cloud engineer. Articles about AWS, Terraform and cloud networking, and notes on things I've built."
   email = "hello@kerim-kilic.com"

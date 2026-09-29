@@ -1,4 +1,4 @@
-{{- $title := cond .IsHome (printf "%s · %s" site.Title site.Params.tagline) (printf "%s · %s" .Title site.Title) -}}
+{{- $title := cond .IsHome (printf "%s · %s" site.Title site.Params.role) (printf "%s · %s" .Title site.Title) -}}
 {{- $desc := .Description | default site.Params.description -}}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="{{ .Permalink }}">
 {{- $isArticle := and .IsPage (eq .Section "articles") -}}
 {{- $image := (.Params.image | default "og/default.png") | absURL -}}
-{{- $imageAlt := cond $isArticle .Title (printf "%s, %s" site.Title site.Params.tagline) -}}
+{{- $imageAlt := cond $isArticle .Title (printf "%s, %s" site.Title site.Params.role) -}}
 <meta property="og:site_name" content="{{ site.Title }}">
 <meta property="og:type" content="{{ cond $isArticle "article" "website" }}">
 <meta property="og:image" content="{{ $image }}">

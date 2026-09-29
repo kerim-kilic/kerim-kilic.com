@@ -8,7 +8,7 @@ focus:
   - title: "Networking across clouds"
     text: "Hub-and-spoke networks that connect AWS, Azure and on-premises sites, and the routing and segmentation between them."
   - title: "Infrastructure as code and automation"
-    text: "Terraform and OpenTofu for whatever the platform needs, from networks and compute to databases and identity. Changes go through a pull request, and a pipeline in GitHub Actions or Jenkins applies them, not someone's laptop. Repetitive operational work gets automated with Python."
+    text: "Most of the infrastructure I work on is defined in Terraform or OpenTofu, from networks and compute to databases and identity. Changes go through a pull request, and a pipeline in GitHub Actions or Jenkins applies them. Repetitive operational work I automate with Python."
   - title: "Migrations and cost"
-    text: "Moving workloads into the cloud or between clouds, and cleaning up the spend that builds up when nobody owns it."
+    text: "Moving workloads into the cloud or between clouds, and the cost that builds up when nobody owns it."
 ---

@@ -17,7 +17,7 @@ I studied electrical engineering and started out in hardware: low-power IoT devi
 
 **Languages:** Dutch (native), English (fluent), Turkish (conversational) and Spanish (B1⁠–⁠B2).
 
-### How I work
+### How I think about infrastructure
 
 I try to keep infrastructure dull. It lives in code, changes go through review and a pipeline rolls them out, and it should be simple enough for the next person to pick up without having to ask me. Roles get the least access that works, and I'd rather use short-lived credentials than keys that sit around for years.
 
