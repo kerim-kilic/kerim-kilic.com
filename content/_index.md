@@ -1,7 +1,7 @@
 ---
 title: "Home"
-headline: "I build the cloud foundations that other engineering teams run on."
-lead: "I'm Kerim, a Lead Cloud Engineer. Everything I build is infrastructure as code, mostly on AWS with some Azure and Google Cloud, and deployed through pipelines. Most of my days go to account structure, identity and networking. On this site I write about what I've built and the problems I ran into."
+headline: "Notes on cloud architecture, from my own projects."
+lead: "I'm Kerim, a Lead Cloud Engineer. I design and build cloud platforms. On this site I write about the things I build and what I learn from them."
 focus:
   - title: "Multi-account governance"
     text: "How AWS accounts are organised, which guardrails apply to them, and how people sign in to them once there are too many to manage by hand."
