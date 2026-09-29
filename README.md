@@ -47,10 +47,11 @@ Pull requests and Dependabot's branches only build. Hugo settings for dev live i
 
 Links shared on LinkedIn and elsewhere use a 1200x630 card. `static/og/default.png` is the site-wide default; an
 article can set its own with `image: "og/<name>.png"` in its front matter. Cards are rendered from
-`tools/og/card.html` with headless Chrome:
+`tools/og/card.html` with headless Chrome. The last argument is the byline; the part before " · " is set in bold, as on
+the site:
 
 ```bash
-tools/og/render.sh static/og/my-article.png "Article title" "One-line summary" "Article"
+tools/og/render.sh static/og/my-article.png "Article title" "One-line summary" "Kerim Kilic · Article"
 ```
 
 ## Favicon
