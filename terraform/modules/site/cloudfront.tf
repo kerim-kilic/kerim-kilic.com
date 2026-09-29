@@ -78,4 +78,9 @@ resource "aws_cloudfront_distribution" "site" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
+
+  # Same guard as the bucket: remove it before a deliberate teardown.
+  lifecycle {
+    prevent_destroy = true
+  }
 }

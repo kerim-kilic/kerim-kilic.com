@@ -214,12 +214,33 @@ Google, or ask for a one-time code sent to that address. To revoke someone, remo
 Dev proves the content and the pipeline. It can't prove what visitors get on prod (the real certificate, headers,
 caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn't. So test prod right after go-live.
 
-1. Applying prod replaces whatever the domain served before with the new site, which is empty until the first deploy.
-   Remove any old DNS records for the apex and `www` first, and do steps 2 to 4 back-to-back so that gap lasts only a
-   couple of minutes.
-2. `terraform apply` in `envs/prod`, then set the `PROD_*` repository variables and the `PROD_AWS_ROLE_ARN` secret.
-3. Merge `dev` into `main`. The workflow deploys prod.
-4. Run the smoke test:
+Go-live happens in two phases, so whatever the domain serves today keeps working until a switch that takes seconds.
+
+**Phase 1: build and preview prod without its DNS records.**
+
+1. Apply everything except the two site records. These two targets pull in the bucket, the certificate and its
+   validation, the distribution and the deploy role (10 to 20 minutes, mostly certificate validation and CloudFront):
+
+   ```bash
+   cd terraform/envs/prod
+   terraform apply \
+     -target=module.site.aws_s3_bucket_policy.site \
+     -target=module.site.aws_iam_role_policy.deploy
+   ```
+
+2. From `terraform output`, set the `PROD_AWS_ROLE_ARN` repository secret and the `PROD_S3_BUCKET` and
+   `PROD_CLOUDFRONT_DISTRIBUTION_ID` repository variables.
+3. Open a pull request from `dev` into `main`, wait for the required checks and merge it with a merge commit. The
+   workflow deploys prod.
+4. Preview prod on the distribution's own `*.cloudfront.net` address (`cloudfront_domain_name` in the outputs): the
+   pages, the published article, a made-up URL for the 404 page. The certificate there is CloudFront's default one.
+
+**Phase 2: the switch.** Do these back to back.
+
+5. In Cloudflare, write down and then delete the old apex and `www` records (keep mail records and the underscore
+   certificate validation records). Keep any old redirect rule for now: it is the rollback.
+6. Run a plain `terraform apply` in `envs/prod`. It adds the two DNS records that point the domain at CloudFront.
+7. Run the smoke test:
 
    ```bash
    tools/smoke-test.sh https://kerim-kilic.com --www
@@ -227,11 +248,15 @@ caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn'
 
    It checks that the pages and 404 behave, that this is the prod build (not dev), that Cloudflare didn't rewrite the
    email link, the HTTPS redirect, the `www` redirect, the security and cache headers, and that the certificate is the
-   ACM one served by CloudFront. It exits non-zero if anything fails.
-5. By hand: open the site on a real phone, and paste an article URL into LinkedIn's Post Inspector
+   ACM one served by CloudFront. It exits non-zero if anything fails. Once it passes, delete the old redirect rule.
+8. By hand: open the site on a real phone, and paste an article URL into LinkedIn's Post Inspector
    (`linkedin.com/post-inspector`) to check the preview card and refresh LinkedIn's cache.
-6. In GitHub, make `main` the default branch and require a pull request to change it.
-7. In the repository's About box (the gear icon on the repository page), set the **Website** to `https://kerim-kilic.com`.
+9. In GitHub, make `main` the default branch (Settings > General).
+10. In the repository's About box (the gear icon on the repository page), set the **Website** to
+    `https://kerim-kilic.com`.
+
+The website bucket and the CloudFront distribution have `prevent_destroy` set, in both environments. To tear one down on
+purpose, remove the `lifecycle` block in `terraform/modules/site` first.
 
 Roll back a bad content deploy by reverting the merge on `main`; the workflow redeploys the previous version.
 

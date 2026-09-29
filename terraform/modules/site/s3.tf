@@ -1,5 +1,10 @@
 resource "aws_s3_bucket" "site" {
   bucket = local.bucket_name
+
+  # Guards dev and prod alike (it cannot be conditional). Remove it before a deliberate teardown.
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "site" {
