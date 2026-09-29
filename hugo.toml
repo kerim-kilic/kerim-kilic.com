@@ -14,21 +14,23 @@ enableRobotsTXT = true
   github = "https://github.com/kerim-kilic"
 
 [menus]
-  [[menus.main]]
-    name = "Articles"
-    pageRef = "/articles"
-    weight = 10
-  [[menus.main]]
-    name = "Portfolio"
-    pageRef = "/portfolio"
-    weight = 20
+  # Every menu item scrolls to a section on the home page. The full article list, the articles and the project
+  # write-ups keep their own pages, linked from those sections.
   [[menus.main]]
     name = "About"
-    pageRef = "/about"
+    url = "/#about"
+    weight = 10
+  [[menus.main]]
+    name = "Projects"
+    url = "/#projects"
+    weight = 20
+  [[menus.main]]
+    name = "Articles"
+    url = "/#articles"
     weight = 30
   [[menus.main]]
     name = "Contact"
-    pageRef = "/contact"
+    url = "/#contact"
     weight = 40
 
 [minify]

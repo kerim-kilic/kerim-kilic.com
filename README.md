@@ -29,7 +29,7 @@ hugo new content articles/my-article-title.md
 ```
 
 Set `draft: false` when an article is ready to go public. Things to edit: `hugo.toml` (name, links),
-`content/_index.md` (home page), `content/about/`, `data/skills.yaml`, `content/portfolio/`.
+`content/_index.md` (home page), `content/about/` and `content/contact/` (sections on the home page), `data/skills.yaml`, `content/portfolio/`.
 
 ## Environments
 

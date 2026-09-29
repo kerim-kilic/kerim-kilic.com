@@ -1,6 +1,6 @@
 ---
 title: "This website: static hosting on AWS"
-description: "A private S3 bucket behind CloudFront, defined in Terraform and deployed from GitHub Actions without stored credentials."
+description: "The site you're on: infrastructure in Terraform, deploys from GitHub Actions without stored keys, and a private dev copy behind a login."
 stack: ["AWS S3", "CloudFront", "ACM", "Terraform", "GitHub Actions (OIDC)", "Cloudflare DNS", "Cloudflare Access", "Hugo"]
 weight: 1
 ---

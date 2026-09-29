@@ -14,6 +14,13 @@
 
 {{ partial "credentials.html" . }}
 
+{{ with site.GetPage "/about" }}
+<section id="about" class="prose">
+  <h2>About</h2>
+  {{ .Content }}
+</section>
+{{ end }}
+
 {{ with .Params.focus }}
 <section>
   <h2>What I do</h2>
@@ -33,7 +40,14 @@
   {{ partial "skills.html" . }}
 </section>
 
-<section>
+<section id="projects">
+  <h2>Projects</h2>
+  {{ range (site.GetPage "/portfolio").Pages }}
+    {{ partial "project-item.html" . }}
+  {{ end }}
+</section>
+
+<section id="articles">
   <div class="section-head">
     <h2>Latest articles</h2>
     <a href="{{ "articles/" | relURL }}">All articles →</a>
@@ -46,9 +60,10 @@
   {{ end }}
 </section>
 
-<section class="cta">
+{{ with site.GetPage "/contact" }}
+<section id="contact" class="cta">
   <h2>Get in touch</h2>
-  <p>Working on something similar, or have a question about one of the articles? Send me a message.</p>
-  <p class="actions"><a class="btn" href="{{ "contact/" | relURL }}">Contact me</a></p>
+  {{ .Content }}
 </section>
+{{ end }}
 {{ end }}

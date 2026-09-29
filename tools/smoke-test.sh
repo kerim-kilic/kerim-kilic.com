@@ -45,7 +45,7 @@ hdr()     { grep -i "^$2:" <<<"$1" | head -1 | cut -d: -f2- | sed 's/^ *//'; }
 echo "Smoke test: $url ($mode)"
 
 echo; echo "Pages"
-for path in / /about/ /articles/ /portfolio/ /contact/ /sitemap.xml /robots.txt /favicon.ico /favicon.svg /apple-touch-icon.png; do
+for path in / /articles/ /portfolio/this-website/ /sitemap.xml /robots.txt /favicon.ico /favicon.svg /apple-touch-icon.png; do
   code=$(status "$url$path")
   expect "$path returns 200 (got $code)" '[[ "$code" == 200 ]]'
 done
@@ -75,8 +75,8 @@ else
 fi
 
 echo; echo "Cloudflare rewrites"
-contact=$(body "$url/contact/")
-expect "contact page has a mailto link" 'grep -q "mailto:" <<<"$contact"'
+contact=$(body "$url/")
+expect "contact section has a mailto link" 'grep -q "mailto:" <<<"$contact"'
 expect "email address was not obfuscated by Cloudflare" '! grep -q "email-protection" <<<"$contact"'
 expect "email address is not in plain text" '! grep -qE "[a-z]+@${host#www.}" <<<"$contact"'
 
@@ -100,8 +100,8 @@ if [[ "$scheme" == https ]]; then
   expect "http:// redirects to https ($location)" '[[ "$location" == 30[18]\ https://* ]]'
 
   if [[ "$check_www" == 1 && "$mode" == prod ]]; then
-    wwwloc=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "https://www.$host/about/")
-    expect "www redirects to the apex ($wwwloc)" '[[ "$wwwloc" == "301 $url/about/" ]]'
+    wwwloc=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "https://www.$host/articles/")
+    expect "www redirects to the apex ($wwwloc)" '[[ "$wwwloc" == "301 $url/articles/" ]]'
   fi
 
   echo; echo "Certificate and edge"

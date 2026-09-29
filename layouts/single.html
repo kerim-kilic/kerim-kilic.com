@@ -12,7 +12,6 @@
     <ul class="tags">{{ range .Params.stack }}<li>{{ . }}</li>{{ end }}</ul>
     {{ end }}
   </header>
-  {{ if .Params.showPhoto }}{{ partial "profile-photo.html" (dict "class" "about-photo" "sizes" "176px") }}{{ end }}
   {{ .Content }}
   {{ if .Params.showSkills }}{{ partial "skills.html" . }}{{ end }}
 </article>
