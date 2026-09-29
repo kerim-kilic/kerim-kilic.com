@@ -19,7 +19,7 @@ I studied electrical engineering and started out in hardware: low-power IoT devi
 
 ### How I work
 
-I try to keep infrastructure dull. It lives in code, changes go through review, and it should be simple enough for the next person to pick up without having to ask me. Roles get the least access that works, and I'd rather use short-lived credentials than keys that sit around for years.
+I try to keep infrastructure dull. It lives in code, changes go through review and a pipeline rolls them out, and it should be simple enough for the next person to pick up without having to ask me. Roles get the least access that works, and I'd rather use short-lived credentials than keys that sit around for years.
 
 When I make a decision I write down why, because that's the part people forget first. Writing things down is also most of the reason this site exists.
 
