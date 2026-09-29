@@ -1,4 +1,4 @@
-{{- /* Context: dict with "class" and "sizes" (the CSS display width, e.g. "144px"). */ -}}
+{{- /* Context: dict with "class" and "sizes" (the CSS display width, e.g. "144px"). High fetch priority: it is the hero image. */ -}}
 {{- with resources.Get "images/profile.jpg" -}}
   {{- $small := .Resize "240x webp q85" -}}
   {{- $large := .Resize (printf "%dx webp q85" (math.Min 480 .Width | int)) -}}
@@ -7,5 +7,5 @@
        srcset="{{ $small.RelPermalink }} 240w, {{ $large.RelPermalink }} {{ $large.Width }}w"
        sizes="{{ $.sizes }}"
        width="{{ $small.Width }}" height="{{ $small.Height }}"
-       alt="Kerim Kilic" decoding="async">
+       alt="Kerim Kilic" fetchpriority="high" decoding="async">
 {{- end -}}

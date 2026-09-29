@@ -9,7 +9,7 @@
       <a class="btn ghost" href="{{ site.Params.linkedin }}" rel="me noopener">{{ partial "icon.html" "linkedin" }}Connect on LinkedIn</a>
     </p>
   </div>
-  {{ partial "profile-photo.html" (dict "class" "hero-photo" "sizes" "200px") }}
+  {{ partial "profile-photo.html" (dict "class" "hero-photo" "sizes" "(max-width: 40rem) 72px, 200px") }}
 </section>
 
 {{ partial "credentials.html" . }}
@@ -49,7 +49,7 @@
 
 <section id="articles">
   <div class="section-head">
-    <h2>Latest articles</h2>
+    <h2>Articles</h2>
     <a href="{{ "articles/" | relURL }}">All articles →</a>
   </div>
   {{ $articles := first 3 (where site.RegularPages "Section" "articles") }}
@@ -62,7 +62,7 @@
 
 {{ with site.GetPage "/contact" }}
 <section id="contact" class="cta">
-  <h2>Get in touch</h2>
+  <h2>Contact</h2>
   {{ .Content }}
 </section>
 {{ end }}
