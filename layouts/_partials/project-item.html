@@ -1,0 +1,7 @@
+<article class="item">
+  <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+  {{ with .Description }}<p>{{ . }}</p>{{ end }}
+  {{ with .Params.stack }}
+  <ul class="tags">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+  {{ end }}
+</article>

@@ -1,0 +1,4 @@
+{{- /* An encoded mailto link to site.Params.email. Usage: {{< email >}} shows the address, {{< email "text" >}} shows the text. */ -}}
+{{- $addr := partial "email.html" . -}}
+<a {{ printf `href="mailto:%s"` $addr | safeHTMLAttr }}>{{ with .Get 0 }}{{ . }}{{ else }}{{ $addr | safeHTML }}{{ end }}</a>
+{{- /**/ -}}

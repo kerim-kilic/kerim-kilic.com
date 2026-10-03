@@ -1,0 +1,69 @@
+{{ define "main" }}
+<section class="hero">
+  <div class="hero-text">
+    <p class="byline"><strong>{{ site.Title }}</strong> · {{ site.Params.role }}</p>
+    <h1>{{ .Params.headline }}</h1>
+    <p class="lead">{{ .Params.lead }}</p>
+    <p class="actions">
+      <a class="btn" href="{{ "articles/" | relURL }}">Read the articles</a>
+      <a class="btn ghost" href="{{ site.Params.linkedin }}" rel="me noopener">{{ partial "icon.html" "linkedin" }}Connect on LinkedIn</a>
+    </p>
+  </div>
+  {{ partial "profile-photo.html" (dict "class" "hero-photo" "sizes" "(max-width: 40rem) 72px, 200px") }}
+</section>
+
+{{ partial "credentials.html" . }}
+
+{{ with site.GetPage "/about" }}
+<section id="about">
+  <h2>About</h2>
+  <div class="about-body prose">{{ .Content }}</div>
+</section>
+{{ end }}
+
+{{ with .Params.focus }}
+<section>
+  <h2>What I work on</h2>
+  <div class="focus">
+    {{ range . }}
+    <div>
+      <h3>{{ .title }}</h3>
+      <p>{{ .text }}</p>
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+<section>
+  <h2>Skills</h2>
+  {{ partial "skills.html" . }}
+</section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  {{ range (site.GetPage "/portfolio").Pages }}
+    {{ partial "project-item.html" . }}
+  {{ end }}
+</section>
+
+<section id="articles">
+  <div class="section-head">
+    <h2>Articles</h2>
+    <a href="{{ "articles/" | relURL }}">All articles →</a>
+  </div>
+  {{ $articles := first 3 (where site.RegularPages "Section" "articles") }}
+  {{ range $articles }}
+    {{ partial "article-item.html" . }}
+  {{ else }}
+    <p class="muted">No articles yet. The first one is nearly done.</p>
+  {{ end }}
+</section>
+
+{{ with site.GetPage "/contact" }}
+<section id="contact" class="cta">
+  <h2>Contact</h2>
+  {{ .Content }}
+</section>
+{{ end }}
+{{ end }}

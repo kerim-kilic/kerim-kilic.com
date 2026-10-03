@@ -1,0 +1,10 @@
+{{- /* Inlines assets/diagrams/<name>.svg so it can use the page's theme colours. Params: name, caption. */ -}}
+{{- $name := .Get "name" -}}
+{{- with resources.Get (printf "diagrams/%s.svg" $name) -}}
+<figure class="diagram">
+  {{ .Content | safeHTML }}
+  <figcaption>{{ $.Get "caption" | markdownify }}</figcaption>
+</figure>
+{{- else -}}
+{{- errorf "diagram %q not found in assets/diagrams" $name -}}
+{{- end -}}

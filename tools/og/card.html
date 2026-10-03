@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Social card template</title>
+<!-- Rendered to a 1200x630 PNG by tools/og/render.sh. Text comes from the query string. -->
+<style>
+  @font-face { font-family: "Inter"; src: url("../../static/fonts/inter.woff2") format("woff2"); font-weight: 100 900; }
+  :root { --bg: #0f1216; --text: #e6e9ed; --muted: #9aa4af; --accent: #4cc2e0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { position: relative; display: flex; align-items: center; gap: 56px; padding: 0 80px; background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; }
+  body::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(760px 420px at 88% 0%, rgba(76, 194, 224, .28), transparent);
+    -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 95%);
+    mask-image: linear-gradient(to bottom, #000 30%, transparent 95%);
+  }
+  .text { position: relative; flex: 1; min-width: 0; }
+  .byline { margin: 0 0 24px; color: var(--muted); font-size: 28px; }
+  .byline strong { color: var(--text); font-weight: 600; }
+  h1 { margin: 0 0 28px; font-weight: 700; letter-spacing: -.03em; line-height: 1.1; }
+  .sub { margin: 0; color: var(--muted); font-size: 34px; line-height: 1.35; text-wrap: pretty; }
+  .photo { position: relative; flex: none; width: 296px; height: 370px; border: 4px solid var(--accent); border-radius: 22px; object-fit: cover; }
+  .foot { position: absolute; left: 80px; bottom: 44px; color: var(--muted); font-size: 26px; letter-spacing: .02em; }
+</style>
+</head>
+<body>
+  <div class="text">
+    <p class="byline" id="byline"></p>
+    <h1 id="title"></h1>
+    <p class="sub" id="sub"></p>
+  </div>
+  <img class="photo" src="../../assets/images/profile.jpg" alt="">
+  <div class="foot">kerim-kilic.com</div>
+  <script>
+    const q = new URLSearchParams(location.search);
+    const fill = (id, value) => { const el = document.getElementById(id); value ? (el.textContent = value) : el.remove(); };
+    const title = q.get('title') || 'Kerim Kilic';
+    // Same shape as the site's byline: the part before " · " is bold.
+    const byline = q.get('eyebrow');
+    fill('byline', byline);
+    if (byline && byline.includes(' · ')) {
+      const [first, ...rest] = byline.split(' · ');
+      const el = document.getElementById('byline');
+      el.textContent = ' · ' + rest.join(' · ');
+      el.prepend(Object.assign(document.createElement('strong'), { textContent: first }));
+    }
+    fill('title', title);
+    fill('sub', q.get('subtitle'));
+    document.getElementById('title').style.fontSize = title.length > 34 ? '60px' : title.length > 20 ? '72px' : '92px';
+  </script>
+</body>
+</html>

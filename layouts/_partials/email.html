@@ -1,0 +1,11 @@
+{{- /* Returns site.Params.email as HTML character references, so simple scrapers reading the page source don't find it.
+       Browsers decode it as normal. Usage: partial "email.html" . (the result is safe HTML, also for attributes). */ -}}
+{{- $codes := dict "@" 64 "." 46 "-" 45 "_" 95 "+" 43 -}}
+{{- range $i, $c := split "abcdefghijklmnopqrstuvwxyz" "" }}{{ $codes = merge $codes (dict $c (add 97 $i)) }}{{ end -}}
+{{- range $i, $c := split "0123456789" "" }}{{ $codes = merge $codes (dict $c (add 48 $i)) }}{{ end -}}
+{{- $out := "" -}}
+{{- range split (lower site.Params.email) "" -}}
+  {{- $out = printf "%s&#%d;" $out (index $codes . | default 0) -}}
+{{- end -}}
+{{- if strings.Contains $out "&#0;" }}{{ errorf "email.html: unsupported character in %q" site.Params.email }}{{ end -}}
+{{- return $out -}}

@@ -1,0 +1,18 @@
+{{ define "main" }}
+<article class="prose">
+  <header class="page-head">
+    <h1>{{ .Title }}</h1>
+    {{ if eq .Section "articles" }}
+    <p class="meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
+      · {{ .ReadingTime }} min read
+      {{ range .Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
+    </p>
+    {{ else if .Params.stack }}
+    <ul class="tags">{{ range .Params.stack }}<li>{{ . }}</li>{{ end }}</ul>
+    {{ end }}
+  </header>
+  {{ .Content }}
+  {{ if .Params.showSkills }}{{ partial "skills.html" . }}{{ end }}
+</article>
+{{ end }}

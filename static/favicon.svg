@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Kerim Kilic</title>
+  <rect width="64" height="64" rx="14" fill="#0f1216"/>
+  <!-- "K" from Space Grotesk Bold (SIL OFL 1.1), converted to a path so the icon needs no font -->
+  <path fill="#4cc2e0" transform="translate(13.3 51) scale(0.0543 -0.0543)" d="M66 0V700H198V422H216L443 700H612L320 355L622 0H448L216 284H198V0Z"/>
+</svg>

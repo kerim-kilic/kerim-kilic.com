@@ -1,0 +1,22 @@
+{{- /* Contact rows with icons. URLs come from [params] in hugo.toml; LinkedIn and GitHub show the handle only. */ -}}
+<ul class="contact-links">
+  <li>
+    {{- $email := partial "email.html" . }}
+    <a {{ printf `href="mailto:%s"` $email | safeHTMLAttr }}>
+      {{ partial "icon.html" "envelope" }}
+      <span><small>Email</small>{{ $email | safeHTML }}</span>
+    </a>
+  </li>
+  <li>
+    <a href="{{ site.Params.linkedin }}" rel="me noopener">
+      {{ partial "icon.html" "linkedin" }}
+      <span><small>LinkedIn</small>{{ site.Params.linkedin | strings.TrimSuffix "/" | path.Base }}</span>
+    </a>
+  </li>
+  <li>
+    <a href="{{ site.Params.github }}" rel="me noopener">
+      {{ partial "icon.html" "github" }}
+      <span><small>GitHub</small>{{ site.Params.github | strings.TrimSuffix "/" | path.Base }}</span>
+    </a>
+  </li>
+</ul>

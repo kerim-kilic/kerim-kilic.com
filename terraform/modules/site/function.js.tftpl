@@ -1,0 +1,37 @@
+// CloudFront Function (viewer-request):
+%{ if origin_verify_secret != "" ~}
+//  - only accepts requests that carry the secret header Cloudflare adds
+%{ endif ~}
+%{ if www_redirect ~}
+//  - redirects www.<domain> to the apex domain
+%{ endif ~}
+//  - maps clean URLs to Hugo's index.html files (/articles/foo/ -> /articles/foo/index.html)
+function handler(event) {
+  var request = event.request;
+%{ if origin_verify_secret != "" ~}
+
+  var verify = request.headers['x-origin-verify'];
+  if (!verify || verify.value !== '${origin_verify_secret}') {
+    return { statusCode: 403, statusDescription: 'Forbidden' };
+  }
+%{ endif ~}
+%{ if www_redirect ~}
+  var host = request.headers.host.value;
+
+  if (host.indexOf('www.') === 0) {
+    return {
+      statusCode: 301,
+      statusDescription: 'Moved Permanently',
+      headers: { location: { value: 'https://' + host.substring(4) + request.uri } }
+    };
+  }
+%{ endif ~}
+
+  var uri = request.uri;
+  if (uri.endsWith('/')) {
+    request.uri += 'index.html';
+  } else if (uri.indexOf('.', uri.lastIndexOf('/')) === -1) {
+    request.uri += '/index.html';
+  }
+  return request;
+}
