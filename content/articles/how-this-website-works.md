@@ -1,10 +1,10 @@
 ---
 title: "How this website works"
-date: 2026-09-19
+date: 2026-10-03
 description: "A private S3 bucket behind CloudFront, DNS in Cloudflare, Terraform for the infrastructure and keyless deploys from GitHub Actions: what I built, why, and what doesn't behave as you'd expect."
 tags: ["aws", "terraform", "cloudfront", "s3", "github-actions"]
 image: "og/how-this-website-works.png"
-draft: true
+draft: false
 ---
 
 This site is about as small as a production system gets: a handful of HTML files, no database, no login. I still wanted to build it the way I would build something at work, for two reasons. The infrastructure is part of what I want to show, and the repository is public, so it has to be something I'm comfortable with people reading.

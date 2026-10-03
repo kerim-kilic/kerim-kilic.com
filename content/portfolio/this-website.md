@@ -7,7 +7,7 @@ weight: 1
 
 ## Overview
 
-This site is plain HTML built with Hugo and served from a private S3 bucket through CloudFront. The infrastructure is in [`terraform/`](https://github.com/kerim-kilic/kerim-kilic.com/tree/main/terraform), in the same repository as the site.
+This site is plain HTML built with Hugo and served from a private S3 bucket through CloudFront. The infrastructure is in [`terraform/`](https://github.com/kerim-kilic/kerim-kilic.com/tree/main/terraform), in the same repository as the site. The decisions behind it, and the places where AWS didn't behave as I expected, are in the article [How this website works]({{< relref "articles/how-this-website-works" >}}).
 
 ## How it's set up
 
