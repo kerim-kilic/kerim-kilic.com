@@ -28,7 +28,8 @@ hugo server -D     # http://localhost:1313, -D includes drafts
 hugo new content articles/my-article-title.md
 ```
 
-Set `draft: false` when an article is ready to go public. Things to edit: `hugo.toml` (name, links),
+Set `draft: false` when an article is ready to go public, with a `date` no later than the day it goes out: prod hides
+future-dated pages. Things to edit: `hugo.toml` (name, links),
 `content/_index.md` (home page), `content/about/` and `content/contact/` (sections on the home page), `data/skills.yaml`, `content/portfolio/`.
 
 ## Environments
@@ -41,7 +42,9 @@ Set `draft: false` when an article is ready to go public. Things to edit: `hugo.
 | Drafts | hidden | visible |
 | Search engines | indexed | `noindex` and `robots.txt` disallow |
 
-Pull requests and Dependabot's branches only build. Hugo settings for dev live in `config/dev/hugo.toml`.
+Work happens on `dev`. A change reaches prod through a pull request from `dev` into `main`, merged with a merge commit
+once the required checks pass. Pull requests and Dependabot's branches only build. Hugo settings for dev live in
+`config/dev/hugo.toml`.
 
 ## Social preview cards
 
@@ -135,7 +138,8 @@ IAM Identity Center, or a policy that denies everything unless the session used 
 
 Before the first apply, in the Cloudflare dashboard:
 
-- Delete any existing DNS records with the same names, or the apply will fail.
+- Check for existing DNS records with the names Terraform will create. For dev, delete them. For prod, see
+  [Bringing up prod](#bringing-up-prod), which keeps the domain working until the switch.
 - Enable **Zero Trust** on the account (the free plan is enough for a few people; Cloudflare may ask you to pick a team
   name, and possibly a payment method).
 - Check **Rules**: `envs/dev` owns the zone's Transform Rules (modify request header) and Configuration Rules. If you
@@ -166,8 +170,9 @@ terraform init -backend-config=../../backend.hcl && terraform plan && terraform 
 
 # 3. Prod, once dev looks right
 cd ../prod
-cp terraform.tfvars.example terraform.tfvars
-terraform init -backend-config=../../backend.hcl && terraform plan && terraform apply
+cp terraform.tfvars.example terraform.tfvars      # the same zone ID and GitHub IDs as dev
+terraform init -backend-config=../../backend.hcl && terraform plan
+# then apply in two steps: see "Bringing up prod"
 ```
 
 Then add these in GitHub (Settings > Secrets and variables > Actions), using each environment's `terraform output`.
@@ -210,56 +215,61 @@ Google, or ask for a one-time code sent to that address. To revoke someone, remo
 - The dev apply changes Cloudflare Access and the two rulesets in your zone, none of which prod needs. Prod only
   writes DNS records.
 
-## Go-live checklist
+### Bringing up prod
 
-Dev proves the content and the pipeline. It can't prove what visitors get on prod (the real certificate, headers,
-caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn't. So test prod right after go-live.
+Prod is built in two steps, so whatever the domain serves beforehand keeps working until a switch that takes seconds.
+Cloudflare won't create a record where one with the same name exists, so the site's two DNS records come last.
 
-Go-live happens in two phases, so whatever the domain serves today keeps working until a switch that takes seconds.
+**1. Build and preview prod without its DNS records.**
 
-**Phase 1: build and preview prod without its DNS records.**
-
-1. Apply everything except the two site records. These two targets pull in the bucket, the certificate and its
-   validation, the distribution and the deploy role (10 to 20 minutes, mostly certificate validation and CloudFront):
+1. Apply everything except the two site records. The targets pull in the bucket, the certificate and its validation
+   records, the distribution and the deploy role. Nothing references the bucket's ownership controls, so they need
+   their own target. Expect 13 to add, and 10 to 20 minutes, mostly certificate validation and CloudFront:
 
    ```bash
    cd terraform/envs/prod
    terraform apply \
      -target=module.site.aws_s3_bucket_policy.site \
-     -target=module.site.aws_iam_role_policy.deploy
+     -target=module.site.aws_iam_role_policy.deploy \
+     -target=module.site.aws_s3_bucket_ownership_controls.site
    ```
 
-2. From `terraform output`, set the `PROD_AWS_ROLE_ARN` repository secret and the `PROD_S3_BUCKET` and
-   `PROD_CLOUDFRONT_DISTRIBUTION_ID` repository variables.
-3. Open a pull request from `dev` into `main`, wait for the required checks and merge it with a merge commit. The
-   workflow deploys prod.
+2. From `terraform output`, set the `PROD_AWS_ROLE_ARN` secret and the `PROD_S3_BUCKET` and
+   `PROD_CLOUDFRONT_DISTRIBUTION_ID` variables.
+3. Merge a pull request from `dev` into `main`. The workflow deploys prod.
 4. Preview prod on the distribution's own `*.cloudfront.net` address (`cloudfront_domain_name` in the outputs): the
-   pages, the published article, a made-up URL for the 404 page. The certificate there is CloudFront's default one.
+   pages, an article, a made-up URL for the 404 page. The certificate there is CloudFront's default one.
 
-**Phase 2: the switch.** Do these back to back.
+**2. The switch.** Do these back to back.
 
-5. In Cloudflare, write down and then delete the old apex and `www` records (keep mail records and the underscore
-   certificate validation records). Keep any old redirect rule for now: it is the rollback.
-6. Run a plain `terraform apply` in `envs/prod`. It adds the two DNS records that point the domain at CloudFront.
-7. Run the smoke test:
+1. In Cloudflare, write down and then delete the existing apex and `www` records (keep mail records and the underscore
+   certificate validation records). The written-down records and any redirect rule are the rollback, so remove a rule
+   only after the checks below pass.
+2. Run a plain `terraform apply` in `envs/prod`. It adds the two DNS records that point the domain at CloudFront.
+3. Run the smoke test (see [Checking prod](#checking-prod)) and open the site on a real phone.
 
-   ```bash
-   tools/smoke-test.sh https://kerim-kilic.com --www
-   ```
+### Checking prod
 
-   It checks that the pages and 404 behave, that this is the prod build (not dev), that Cloudflare didn't rewrite the
-   email link, the HTTPS redirect, the `www` redirect, the security and cache headers, and that the certificate is the
-   ACM one served by CloudFront. It exits non-zero if anything fails. Once it passes, delete the old redirect rule.
-8. By hand: open the site on a real phone, and paste an article URL into LinkedIn's Post Inspector
-   (`linkedin.com/post-inspector`) to check the preview card and refresh LinkedIn's cache.
-9. In GitHub, make `main` the default branch (Settings > General).
-10. In the repository's About box (the gear icon on the repository page), set the **Website** to
-    `https://kerim-kilic.com`.
+Dev proves the content and the pipeline. It can't prove what visitors get on prod (the real certificate, headers,
+caching, the `www` redirect), because dev sits behind Cloudflare and prod doesn't. So check prod after any
+infrastructure change:
 
-The website bucket and the CloudFront distribution have `prevent_destroy` set, in both environments. To tear one down on
-purpose, remove the `lifecycle` block in `terraform/modules/site` first.
+```bash
+tools/smoke-test.sh https://kerim-kilic.com --www
+```
 
-Roll back a bad content deploy by reverting the merge on `main`; the workflow redeploys the previous version.
+It checks that the pages and 404 behave, that this is the prod build (not dev), that Cloudflare didn't rewrite the
+email link, the HTTPS redirect, the `www` redirect, the security and cache headers, and that the certificate is the ACM
+one served by CloudFront. It exits non-zero if anything fails.
+
+After changing an article's title, summary or card, paste its URL into LinkedIn's Post Inspector
+(`linkedin.com/post-inspector`) to refresh the preview LinkedIn has cached.
+
+### Rolling back and tearing down
+
+- A bad content deploy: revert the merge on `main` (through a pull request). The workflow redeploys the previous version.
+- The website bucket and the CloudFront distribution have `prevent_destroy` set, in both environments. To tear one down
+  on purpose, remove the `lifecycle` block in `terraform/modules/site` first.
 
 ## Licence
 

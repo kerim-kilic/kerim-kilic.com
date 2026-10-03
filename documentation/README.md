@@ -9,5 +9,5 @@ Technical documentation for how this site is built and run.
 | [`terraform/iam/`](../terraform/iam/README.md) | The permissions the person running Terraform needs, and the self-service key policy |
 | [`terraform/state-bucket/`](../terraform/state-bucket/README.md) | How the Terraform state bucket is created and locked down |
 
-Operational commands (apply order, repository variables, the go-live checklist) are in the top-level
+Operational commands (apply order, repository variables, bringing up and checking prod) are in the top-level
 [`README.md`](../README.md). The article "How this website works" on the site explains the design for a general audience.

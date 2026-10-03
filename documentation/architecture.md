@@ -69,7 +69,7 @@ only, without touching the zone-wide SSL mode.
 
 **Known difference:** dev traffic passes through Cloudflare's proxy and prod traffic does not. Browsers see Cloudflare's
 certificate on dev and the ACM certificate on prod; Cloudflare can rewrite HTML (for example email obfuscation) and adds
-its own cache. This was accepted, and prod is verified after go-live with `tools/smoke-test.sh`.
+its own cache. This was accepted, and prod is verified after every infrastructure change with `tools/smoke-test.sh`.
 
 ## Deployment
 
@@ -105,7 +105,7 @@ GitHub OIDC, sync to S3 in three passes with different `Cache-Control` values, a
 | Deploy roles per environment, trust defined in Terraform | A feature branch can never write to the production bucket, and the rule is enforced in AWS, not in a GitHub setting |
 | `DEV_` / `PROD_` repository variables and secrets instead of GitHub Environments | Keeps the OIDC subject as `ref:refs/heads/...` so the trust conditions stay in code |
 | State in S3 with native locking | No extra lock table; the bucket can be shared by other projects through per-project key prefixes |
-| Test production right after go-live | Covers the dev/prod difference cheaply |
+| Smoke-test production after infrastructure changes | Covers the dev/prod difference cheaply |
 
 ## Limits worth knowing
 

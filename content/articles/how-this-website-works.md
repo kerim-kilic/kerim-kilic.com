@@ -115,7 +115,7 @@ I didn't want the first version of an article to go live untested, so there are 
 - **The back door is closed.** Cloudflare adds a secret header to every request it forwards, and the CloudFront Function refuses anything without it. Without that check, anyone who found the raw `cloudfront.net` address could skip the login.
 - **Dev shows drafts, marked `noindex`.** It builds with drafts visible and tells search engines to stay away, so I can review an article there before it goes public.
 
-Because the two environments share a module, dev is a copy of production with a login in front. The one difference is the traffic path: dev goes through Cloudflare's proxy so Access can work, while production goes straight to CloudFront. Anything that works on dev should work on production, apart from that extra hop. To cover the gap, a small script (`tools/smoke-test.sh`) checks the live production site right after go-live: pages, the 404, the redirects, the security and cache headers, and that the certificate is the one CloudFront serves.
+Because the two environments share a module, dev is a copy of production with a login in front. The one difference is the traffic path: dev goes through Cloudflare's proxy so Access can work, while production goes straight to CloudFront. Anything that works on dev should work on production, apart from that extra hop. To cover the gap, a small script (`tools/smoke-test.sh`) checks the live production site after every infrastructure change: pages, the 404, the redirects, the security and cache headers, and that the certificate is the one CloudFront serves.
 
 ## How the Terraform is laid out
 

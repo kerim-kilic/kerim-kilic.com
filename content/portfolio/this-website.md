@@ -20,4 +20,4 @@ This site is plain HTML built with Hugo and served from a private S3 bucket thro
 
 ## Why static
 
-A static site costs almost nothing, loads quickly and has nothing to patch. The downside is that anything dynamic, like a form or search, needs a separate service, and I don't need either here. Production doesn't sit behind Cloudflare the way dev does, so I run a smoke test against the live site after each go-live to catch any difference.
+A static site costs almost nothing, loads quickly and has nothing to patch. The downside is that anything dynamic, like a form or search, needs a separate service, and I don't need either here. Production doesn't sit behind Cloudflare the way dev does, so I run a smoke test against the live site after every infrastructure change to catch any difference.

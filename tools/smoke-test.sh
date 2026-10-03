@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Smoke test a deployed copy of the site. Run it right after go-live.
+# Smoke test a deployed copy of the site. Run it after any infrastructure change.
 #
 #   tools/smoke-test.sh [URL] [--dev] [--www]
 #
