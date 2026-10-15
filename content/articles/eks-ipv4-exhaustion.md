@@ -7,8 +7,6 @@ image: "og/eks-ipv4-exhaustion.png"
 draft: true
 ---
 
-> **Draft for local review.** Fact-checked against the AWS documentation and the VPC CNI repository on 4 October 2026; lab run on 5 October 2026. Sources and prices checked on 5 October 2026.
-
 Pods are stuck in `ContainerCreating`, the events say the CNI failed to assign an IP address, and the nodes have plenty of CPU and memory free. The cluster autoscaler (or Karpenter) adds a node, which doesn't help and can make things worse, because the new node needs addresses of its own. The subnet is full.
 
 On EKS, every pod gets an address from your VPC subnet by default. That's a good default, but in a modest address range a cluster can run out of IPv4 long before it runs out of CPU or memory. I wanted to see this happen, so I read the AWS documentation and ran a small lab in a sandbox account. Below is where the addresses go, how to see how close you are, and the fixes I tried, cheapest first. The lab code is linked at the end.
