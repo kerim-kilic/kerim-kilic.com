@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 268" font-size="13" role="img" aria-label="Pause pods running in each lab step, on the same four t3.medium nodes in two /27 subnets. Default settings: 38 of 58 running, 20 stuck. Warm IP targets: 40 of 58 running, 18 stuck. Prefix delegation in the /27 subnets: 0 of 40 running, 40 stuck. Pod subnets in 100.64.0.0/16: 58 of 58 running.">
+<!-- Measured 2026-10-05: 4 x t3.medium, max pods 17, two /27 node subnets. Bar length = pause pods asked for, 8px per pod. -->
+<text x="20" y="30" font-weight="600" fill="currentColor">Pause pods running, same four nodes, same two /27 subnets</text>
+<text x="20" y="49" font-size="11" style="fill:var(--muted)">58 is what the nodes' max pods allow after the system pods</text>
+<text x="20" y="89" fill="currentColor">1. Default settings</text>
+<rect x="250" y="72" width="304" height="24" rx="4" style="fill:var(--accent)"/>
+<rect x="556.75" y="72.75" width="158.5" height="22.5" rx="4" fill="none" stroke="#e5534b" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="726" y="89" font-size="12" fill="currentColor"><tspan font-weight="600">38</tspan> of 58</text>
+<text x="20" y="133" fill="currentColor">2. Warm IP targets</text>
+<rect x="250" y="116" width="320" height="24" rx="4" style="fill:var(--accent)"/>
+<rect x="572.75" y="116.75" width="142.5" height="22.5" rx="4" fill="none" stroke="#e5534b" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="726" y="133" font-size="12" fill="currentColor"><tspan font-weight="600">40</tspan> of 58</text>
+<text x="20" y="177" fill="currentColor">3. Prefix delegation</text>
+<rect x="250.75" y="160.75" width="318.5" height="22.5" rx="4" fill="none" stroke="#e5534b" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="582" y="177" font-size="12" fill="currentColor"><tspan font-weight="600">0</tspan> of 40 <tspan style="fill:var(--muted)">(stopped asking)</tspan></text>
+<text x="20" y="221" fill="currentColor">4. Pod subnets in 100.64.0.0/16</text>
+<rect x="250" y="204" width="464" height="24" rx="4" style="fill:var(--accent)"/>
+<text x="726" y="221" font-size="12" fill="currentColor"><tspan font-weight="600">58</tspan> of 58</text>
+<rect x="250" y="246" width="16" height="16" rx="3" style="fill:var(--accent)"/>
+<text x="272" y="258" font-size="11" fill="currentColor">running</text>
+<rect x="330.75" y="246.75" width="14.5" height="14.5" rx="3" fill="none" stroke="#e5534b" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="352" y="258" font-size="11" fill="currentColor">stuck in ContainerCreating: no address</text>
+</svg>
