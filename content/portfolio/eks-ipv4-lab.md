@@ -3,7 +3,7 @@ title: "EKS IPv4 lab: running a cluster out of addresses"
 description: "A small, short-lived EKS lab that runs out of IPv4 on purpose, then measures the fixes: warm pool tuning, prefix delegation and a 100.64 range for pods."
 stack: ["Amazon EKS", "Amazon VPC CNI", "Terraform", "Bash", "Python", "GitHub Actions"]
 weight: 2
-draft: true
+draft: false
 ---
 
 ## Overview

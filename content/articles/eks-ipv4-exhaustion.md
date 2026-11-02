@@ -4,7 +4,7 @@ date: 2026-11-07
 description: "Running out of IPv4 in EKS: why the VPC CNI uses so many addresses, how to measure it, and the options, cheapest first."
 tags: ["aws", "eks", "kubernetes", "networking", "vpc"]
 image: "og/eks-ipv4-exhaustion.png"
-draft: true
+draft: false
 ---
 
 Pods are stuck in `ContainerCreating`, the events say the CNI failed to assign an IP address, and the nodes have plenty of CPU and memory free. The cluster autoscaler (or Karpenter) adds a node, which doesn't help and can make things worse, because the new node needs addresses of its own. The subnet is full.
