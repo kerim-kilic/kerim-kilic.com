@@ -83,9 +83,10 @@ GitHub OIDC, sync to S3 in three passes with different `Cache-Control` values, a
   same name from inheriting the trust.
 - **Role permissions are minimal:** list, put and delete objects in its own bucket, and create an invalidation on its own
   distribution.
-- **Actions stay current.** Dependabot proposes updates to the GitHub Actions the workflow uses (weekly, grouped). Its
-  pull requests target `dev`, so a new version is deployed and tested there before it can reach `main`. Its own branches
-  only build; they never deploy.
+- **Dependencies stay current.** Dependabot proposes updates to the GitHub Actions the workflow uses (weekly, grouped)
+  and to the Terraform provider lock files of the three environments (monthly, grouped). Its pull requests target `dev`,
+  so a new version is deployed and tested there before it can reach `main`. Its own branches only build; they never
+  deploy. A provider update changes only the lock files: it takes effect at the next manual `terraform plan` and apply.
 - **Repository variables** select the target: `AWS_REGION`, and the `DEV_` / `PROD_` bucket name and distribution ID. The
   `DEV_` / `PROD_` role ARN is a repository **secret**, only so that it is masked in public logs (an ARN contains the AWS
   account ID). None of these values is a credential.

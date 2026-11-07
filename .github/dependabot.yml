@@ -1,6 +1,8 @@
-# Keeps the GitHub Actions in .github/workflows up to date: one grouped pull request a week when a new release exists.
-# Pull requests target dev, not the default branch, so a new action version is deployed and tested on dev before it can
-# reach main (and production). Security updates may still target the default branch.
+# Keeps the GitHub Actions in .github/workflows (weekly) and the Terraform provider lock files (monthly) up to date,
+# each as one grouped pull request when a new release exists.
+# Pull requests target dev, not the default branch, so a change is tested there before it can reach main (and production).
+# A provider bump only changes the lock files: nothing is applied until the next manual terraform plan and apply.
+# Security updates may still target the default branch.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
@@ -10,4 +12,16 @@ updates:
       interval: "weekly"
     groups:
       github-actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "terraform"
+    directories:
+      - "/terraform/envs/shared"
+      - "/terraform/envs/dev"
+      - "/terraform/envs/prod"
+    target-branch: "dev"
+    schedule:
+      interval: "monthly"
+    groups:
+      terraform-providers:
         patterns: ["*"]
