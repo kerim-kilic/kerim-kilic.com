@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 466" font-size="13" role="img" aria-label="Lab results for an IPv6-only instance, in four steps. Sites and AWS dual-stack endpoints with an IPv6 address work in every step. IPv4-only sites, the AWS CLI's default endpoints and S3's default name fail at once with only the egress-only gateway, hang once DNS64 is on, and work through NAT64 once 64:ff9b::/96 is routed to the NAT gateway. With VPC endpoints, the default STS and Systems Manager endpoints go through the interface endpoints, and S3's dual-stack name through the gateway endpoint, but S3's default name still goes through NAT64.">
+<defs>
+<marker id="v6r-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+<marker id="v6r-arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#e5534b"/></marker>
+</defs>
+<!-- Measured 2026-11-08, aws-ipv6-lab. Cells: green = works, amber = NAT64 (charged per GB), red = fails. -->
+<text x="20" y="26" font-weight="600" fill="currentColor">What an IPv6-only instance could reach, step by step</text>
+<text x="303.0" y="52" font-size="11" font-weight="600" text-anchor="middle" fill="currentColor">1. Egress-only gateway</text>
+<text x="441.0" y="52" font-size="11" font-weight="600" text-anchor="middle" fill="currentColor">2. + DNS64</text>
+<text x="579.0" y="52" font-size="11" font-weight="600" text-anchor="middle" fill="currentColor">3. + route to NAT64</text>
+<text x="717.0" y="52" font-size="11" font-weight="600" text-anchor="middle" fill="currentColor">4. + VPC endpoints</text>
+<text x="20" y="82" font-size="12" fill="currentColor">Sites with an IPv6 address</text>
+<text x="20" y="98" font-size="11" style="fill:var(--muted)">pypi.org, Docker Hub</text>
+<rect x="236" y="68" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="302.0" y="90" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="374" y="68" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="440.0" y="90" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="512" y="68" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="578.0" y="90" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="650" y="68" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="716.0" y="90" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<text x="20" y="128" font-size="12" fill="currentColor">IPv4-only sites</text>
+<text x="20" y="144" font-size="11" style="fill:var(--muted)">checkip.amazonaws.com</text>
+<rect x="236" y="114" width="132" height="34" rx="5" fill="#e5534b" fill-opacity=".14"/>
+<text x="302.0" y="136" font-size="11" text-anchor="middle" fill="#e5534b">fails at once</text>
+<rect x="374.75" y="114.75" width="130.5" height="32.5" rx="5" fill="none" stroke="#e5534b" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="440.0" y="136" font-size="11" text-anchor="middle" fill="#e5534b">hangs</text>
+<rect x="512" y="114" width="132" height="34" rx="5" fill="#c98a12" fill-opacity=".16"/>
+<text x="578.0" y="136" font-size="11" text-anchor="middle" fill="currentColor">works, NAT64</text>
+<rect x="650" y="114" width="132" height="34" rx="5" fill="#c98a12" fill-opacity=".16"/>
+<text x="716.0" y="136" font-size="11" text-anchor="middle" fill="currentColor">works, NAT64</text>
+<text x="20" y="174" font-size="12" fill="currentColor">AWS CLI, default endpoints</text>
+<text x="20" y="190" font-size="11" style="fill:var(--muted)">STS, Systems Manager</text>
+<rect x="236" y="160" width="132" height="34" rx="5" fill="#e5534b" fill-opacity=".14"/>
+<text x="302.0" y="182" font-size="11" text-anchor="middle" fill="#e5534b">fails at once</text>
+<rect x="374.75" y="160.75" width="130.5" height="32.5" rx="5" fill="none" stroke="#e5534b" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="440.0" y="182" font-size="11" text-anchor="middle" fill="#e5534b">hangs</text>
+<rect x="512" y="160" width="132" height="34" rx="5" fill="#c98a12" fill-opacity=".16"/>
+<text x="578.0" y="182" font-size="11" text-anchor="middle" fill="currentColor">works, NAT64</text>
+<rect x="650" y="160" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="716.0" y="182" font-size="11" text-anchor="middle" fill="currentColor">works, endpoint</text>
+<text x="20" y="220" font-size="12" fill="currentColor">AWS CLI, dual-stack endpoints</text>
+<text x="20" y="236" font-size="11" style="fill:var(--muted)">STS, S3, Systems Manager</text>
+<rect x="236" y="206" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="302.0" y="228" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="374" y="206" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="440.0" y="228" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="512" y="206" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="578.0" y="228" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="650" y="206" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="716.0" y="228" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<text x="20" y="266" font-size="12" fill="currentColor">S3, default name</text>
+<text x="20" y="282" font-size="11" style="fill:var(--muted)">s3.us-east-1.amazonaws.com</text>
+<rect x="236" y="252" width="132" height="34" rx="5" fill="#e5534b" fill-opacity=".14"/>
+<text x="302.0" y="274" font-size="11" text-anchor="middle" fill="#e5534b">fails at once</text>
+<rect x="374.75" y="252.75" width="130.5" height="32.5" rx="5" fill="none" stroke="#e5534b" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="440.0" y="274" font-size="11" text-anchor="middle" fill="#e5534b">hangs</text>
+<rect x="512" y="252" width="132" height="34" rx="5" fill="#c98a12" fill-opacity=".16"/>
+<text x="578.0" y="274" font-size="11" text-anchor="middle" fill="currentColor">works, NAT64</text>
+<rect x="650" y="252" width="132" height="34" rx="5" fill="#c98a12" fill-opacity=".16"/>
+<text x="716.0" y="274" font-size="11" font-weight="600" text-anchor="middle" fill="currentColor">NAT64, not endpoint</text>
+<text x="20" y="312" font-size="12" fill="currentColor">S3, dual-stack name</text>
+<text x="20" y="328" font-size="11" style="fill:var(--muted)">s3.dualstack.us-east-1...</text>
+<rect x="236" y="298" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="302.0" y="320" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="374" y="298" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="440.0" y="320" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="512" y="298" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="578.0" y="320" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="650" y="298" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="716.0" y="320" font-size="11" text-anchor="middle" fill="currentColor">works, endpoint</text>
+<text x="20" y="358" font-size="12" fill="currentColor">ECR pull, default registry</text>
+<text x="20" y="374" font-size="11" style="fill:var(--muted)">&lt;account&gt;.dkr.ecr...</text>
+<rect x="236" y="344" width="132" height="34" rx="5" fill="#e5534b" fill-opacity=".14"/>
+<text x="302.0" y="366" font-size="11" text-anchor="middle" fill="#e5534b">fails at once</text>
+<rect x="374.75" y="344.75" width="130.5" height="32.5" rx="5" fill="none" stroke="#e5534b" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="440.0" y="366" font-size="11" text-anchor="middle" fill="#e5534b">hangs</text>
+<rect x="512" y="344" width="132" height="34" rx="5" fill="#c98a12" fill-opacity=".16"/>
+<text x="578.0" y="366" font-size="11" text-anchor="middle" fill="currentColor">works, NAT64</text>
+<rect x="650" y="344" width="132" height="34" rx="5" fill="#c98a12" fill-opacity=".16"/>
+<text x="716.0" y="366" font-size="11" font-weight="600" text-anchor="middle" fill="currentColor">NAT64, not endpoint</text>
+<text x="20" y="404" font-size="12" fill="currentColor">ECR pull, dual-stack registry</text>
+<text x="20" y="420" font-size="11" style="fill:var(--muted)">&lt;account&gt;.dkr-ecr...on.aws</text>
+<rect x="236" y="390" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="302.0" y="412" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="374" y="390" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="440.0" y="412" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="512" y="390" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="578.0" y="412" font-size="11" text-anchor="middle" fill="currentColor">works, IPv6</text>
+<rect x="650" y="390" width="132" height="34" rx="5" style="fill:var(--accent)" fill-opacity=".18"/>
+<text x="716.0" y="412" font-size="11" text-anchor="middle" fill="currentColor">works, endpoint</text>
+<rect x="20" y="440" width="16" height="16" rx="3" style="fill:var(--accent)" fill-opacity=".35"/>
+<text x="42" y="452" font-size="11" fill="currentColor">direct over IPv6, or an endpoint: no NAT charge</text>
+<rect x="354" y="440" width="16" height="16" rx="3" fill="#c98a12" fill-opacity=".35"/>
+<text x="376" y="452" font-size="11" fill="currentColor">through NAT64: charged per GB</text>
+<rect x="580" y="440" width="16" height="16" rx="3" fill="#e5534b" fill-opacity=".3"/>
+<text x="602" y="452" font-size="11" fill="currentColor">fails</text>
+</svg>
