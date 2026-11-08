@@ -1,15 +1,15 @@
 ---
-title: "Your IPv6-only subnet still pays the NAT gateway for S3 and ECR"
+title: "IPv6-only on AWS: why S3 and ECR still go through the NAT gateway"
 date: 2026-12-05
-description: "In an IPv6-only subnet, S3 downloads and ECR image pulls go through NAT64 by default, VPC endpoints or not. A lab shows why, what it costs, and the one setting that fixes it."
+description: "In an IPv6-only subnet, S3 downloads and ECR image pulls go through NAT64 by default, VPC endpoints or not. A lab shows why, what it costs, and how the dual-stack names fix it."
 tags: ["aws", "ipv6", "networking", "vpc", "ecr"]
 image: "og/ipv6-only-subnets-nat-costs.png"
 draft: true
 ---
 
-I put an EC2 instance in a subnet with no IPv4 range at all, gave it the usual way out to the IPv4 internet, DNS64 and NAT64, and added an S3 gateway endpoint and ECR interface endpoints so AWS traffic would stay off the NAT gateway. Then I pulled a 42 MB image from ECR and downloaded a 20 MB file from S3, and watched the NAT gateway's byte counter. It went up by 42 MB and then by 21 MB. Every byte went through the NAT gateway, at $0.045 per GB, endpoints or not.
+I put an EC2 instance in a subnet with no IPv4 range at all. I gave it the usual way out to the IPv4 internet, DNS64 and NAT64, and added an S3 gateway endpoint and ECR interface endpoints so AWS traffic would stay off the NAT gateway. Then I pulled a 42 MB image from ECR and downloaded a 20 MB file from S3, and watched the NAT gateway's byte counter. It went up by 42 MB and then by 21 MB. Every byte went through the NAT gateway, at $0.045 per GB, endpoints or not.
 
-The fix turned out to be one setting. With it, the same pull and the same download went through the NAT gateway with 0 bytes. This article is about why that happens, how to see it in your own subnets, and what else an IPv6-only instance does that I didn't expect. I ran everything in a small lab in a sandbox account; the code and the full output are linked at the end.
+The fix turned out to be a name: the dual-stack one. Through the dual-stack names, the same pull and the same download added 0 bytes to the NAT gateway. This article is about why that happens, how to see it in your own subnets, and what else an IPv6-only instance does that I didn't expect. I ran everything in a small lab in a sandbox account; the code and the full output are linked at the end.
 
 ## How an IPv6-only instance reaches IPv4 at all
 
@@ -52,7 +52,18 @@ Most AWS services have two sets of public endpoints: the default ones, under `am
 
 The SDKs, the CLI and Docker use the default names unless you tell them otherwise, and so does everything that copies them: the repository URI the ECR console shows you, and the `repository_url` that Terraform gives you for an ECR repository, are both the default name. In an IPv6-only subnet with DNS64, every default name gets a made-up `64:ff9b::` address, and every byte to it goes through the NAT gateway.
 
-## S3: the gateway endpoint you added isn't used
+You can see which way a name goes from any instance in the subnet. Look it up with `dig AAAA <name>` (on Amazon Linux, `dig` is in the `bind-utils` package): an answer in `64:ff9b::` means the traffic goes through the NAT gateway, and a real IPv6 address means it doesn't. In step 3 of the lab, before any endpoints:
+
+```text
+s3.us-east-1.amazonaws.com                   AAAA  64:ff9b::198.51.100.19 ...
+s3.dualstack.us-east-1.amazonaws.com         AAAA  2001:db8:8:1::100f:e5b7 ...
+<account>.dkr.ecr.us-east-1.amazonaws.com    AAAA  64:ff9b::203.0.113.117
+<account>.dkr-ecr.us-east-1.on.aws           AAAA  2001:db8:13:2:ca2f:527d:4816:ad61
+```
+
+Check the names your clients actually use: the endpoints your SDKs call and the registry in your image references.
+
+### S3: the gateway endpoint you added isn't used
 
 The usual advice for S3 traffic from private subnets is an S3 gateway endpoint: it's free, and it keeps S3 traffic off the NAT gateway. In an IPv6-only subnet it can be IPv6 too: AWS supports [gateway endpoints of IP address type `ipv6`](https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html), and the lab used one.
 
@@ -68,9 +79,9 @@ The NAT gateway agreed. Each 20 MB download through the default name added about
 
 The fix is to make clients use the dual-stack name. For the SDKs and the CLI that's one setting, `AWS_USE_DUALSTACK_ENDPOINT=true` or `use_dualstack_endpoint = true` in the config file. It applies to every service the client calls, and a request [fails rather than falls back](https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoints.html) if a service has no dual-stack endpoint in your Region, so check the services you use first. With the setting on, S3 traffic goes to S3's real IPv6 addresses, and the gateway endpoint, if there is one, carries it.
 
-## ECR: the registry name decides where the layers come from
+### ECR: the registry name decides where the layers come from
 
-This one cost more per request, and it's the one I'd check first in a real account, because image pulls are often the biggest thing a workload downloads.
+This one moved the most bytes in the lab, and it's the one I'd check first in a real account, because image pulls are often the biggest thing a workload downloads.
 
 When Docker or containerd pulls an image from ECR, the registry doesn't send the layers itself. It answers each layer request with a redirect to S3. The lab looked at where that redirect pointed, and the answer depends on the name you pulled from:
 
@@ -85,13 +96,13 @@ The ECR interface endpoints didn't change that. ECR supports them over IPv6, and
 
 The fix is the dual-stack registry name in your image references, `<account>.dkr-ecr.<region>.on.aws/<repository>:<tag>`. The same login works for both names. The dual-stack pull worked from the first step of the lab, with nothing but the egress-only internet gateway: no DNS64, and no route to the NAT gateway.
 
-## Interface endpoints do work, for the services that use them
+### Interface endpoints do work, for the services that use them
 
 For STS and Systems Manager, interface endpoints did what you'd hope. The endpoints have to be of [IP address type `ipv6`](https://docs.aws.amazon.com/vpc/latest/privatelink/create-interface-endpoint.html) to live in an IPv6-only subnet, and with private DNS on, the default names answer with the endpoint's IPv6 address and no A record at all, so DNS64 has nothing to make up:
 
 ```text
 sts.us-east-1.amazonaws.com   A     - (Name or service not known)
-sts.us-east-1.amazonaws.com   AAAA  2001:db8:1:10:b000:90c:2a17:a035
+sts.us-east-1.amazonaws.com   AAAA  2001:db8:1:10:82b6:a557:cacf:84f2
 ```
 
 The CLI's default settings then reached both services through the endpoints, over IPv6. Interface endpoints [cost](https://aws.amazon.com/privatelink/pricing/) $0.01 an hour per Availability Zone and $0.01 per GB, so they make sense for services you call a lot and can't move to dual-stack names.
@@ -100,11 +111,17 @@ Not every endpoint supports IPv6, and AWS's documentation isn't the place to che
 
 ```sh
 aws ec2 describe-vpc-endpoint-services \
-  --service-names com.amazonaws.us-east-1.s3 com.amazonaws.us-east-1.ecr.dkr com.amazonaws.us-east-1.ec2messages \
-  --query 'ServiceDetails[].[ServiceName,ServiceType[0].ServiceType,SupportedIpAddressTypes]'
+  --service-names com.amazonaws.us-east-1.s3 \
+                  com.amazonaws.us-east-1.ecr.dkr \
+                  com.amazonaws.us-east-1.ec2messages \
+  --query 'ServiceDetails[].[ServiceName,
+                             ServiceType[0].ServiceType,
+                             SupportedIpAddressTypes]'
 ```
 
 In `us-east-1`, in November 2026, STS, Systems Manager, `ssmmessages`, both ECR endpoints and S3 (gateway and interface) supported IPv6. `ec2messages`, one of the endpoints the Systems Manager agent uses, didn't. And AWS's own [IPv6 support table](https://docs.aws.amazon.com/vpc/latest/userguide/aws-ipv6-support.html) said S3's private endpoints don't support IPv6, which the API and the lab both contradict.
+
+{{< diagram name="ipv6-lab-results" caption="The lab's results, step by step. Amber is through NAT64: it works, and you pay per GB. In step 4, the interface endpoints take over both the default and the dual-stack STS and Systems Manager names, but S3's default name and image layers pulled through ECR's default registry name still go through NAT64. Only the dual-stack names stay off the NAT gateway in every step." >}}
 
 ## What it costs
 
@@ -118,19 +135,15 @@ In `us-east-1`, at November 2026 prices:
 
 Take a workload that pulls 500 GB of images from ECR and downloads 1 TB from S3 a month, from IPv6-only subnets. On default names, that's 1.5 TB through NAT64, about $68 a month in processing alone. On dual-stack names, it's nothing. You still want the NAT gateway for the IPv4-only internet; you just don't want AWS's own traffic in it.
 
-## Two other things I didn't expect
+## An IPv6-only instance has an IPv4 address
 
-**An IPv6-only instance has an IPv4 address.** It's a link-local one, from the instance itself:
+I didn't expect this one. It's a link-local address, from the instance itself:
 
 ```text
-ens5   UP   169.254.164.83/32 metric 512 2001:db8:1:10:9635:6d55:6dcd:dc6a/128 fe80::10ff:d7ff:fe71:494d/64
+ens5   UP   169.254.164.83/32 metric 512 2001:db8:20:10:9635:6d55:6dcd:dc6a/128 fe80::10ff:d7ff:fe71:494d/64
 ```
 
 and the instance has routes from it to the services AWS runs on link-local addresses: the DNS resolver at `169.254.169.253`, the [instance metadata service](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html) at `169.254.169.254` and the time service at `169.254.169.123`. I expected to have to switch on the metadata service's IPv6 endpoint, which is off by default, for the SDK to find the instance's credentials. I didn't. On an instance with the IPv6 endpoint left off, the metadata service answered on `169.254.169.254` and the CLI worked with its default settings. The only calls that failed were the ones I'd told to use the IPv6 endpoint (`AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE=IPv6`). Package updates worked too: Amazon Linux 2023's repositories are reachable over IPv6.
-
-**GitHub through NAT64 was unreliable, and plain IPv4 wasn't.** Through NAT64, 8 of 36 requests to `github.com` failed over the day: the connection opened in milliseconds, then nothing came back, or the connection died, or a `504`. They came in bursts: some runs lost most of their requests, others none. Over plain IPv4 through the same NAT gateway, a control instance made 18 requests and none failed, including to a GitHub address that failed through NAT64 three minutes later. Every other IPv4-only host I tried answered every time. That points at something on the NAT64 path, but 18 requests aren't enough to be sure, and I haven't found the cause. If you depend on GitHub from IPv6-only subnets, test it with real traffic over more than an afternoon.
-
-{{< diagram name="ipv6-lab-results" caption="The lab's results, step by step. Amber is through NAT64: it works, and you pay per GB. In step 4, the interface endpoints take over the default STS and Systems Manager names, but S3's default name and image layers pulled through ECR's default registry name still go through NAT64. Only the dual-stack names stay off the NAT gateway in every step." >}}
 
 ## A checklist for an IPv6-only subnet
 
@@ -157,11 +170,10 @@ Everything above that says "in the lab" comes from three runs on one day in a sa
 
 The instances run their checks every five minutes and read their step from their own tag, so moving to the next step changes the network, not the instances. The test downloads are spaced more than a minute apart, so the NAT gateway's per-minute metrics show each one on its own.
 
-It costs money while it runs: in `us-east-1`, about $0.06 an hour for the NAT gateway, its public IPv4 address and a `t3.micro`, plus $0.04 an hour for step 4's four interface endpoints and a few cents of NAT processing for the test downloads. All three of my runs together cost well under a dollar.
+It costs money while it runs: in `us-east-1`, about $0.06 an hour for the NAT gateway, its public IPv4 address and a `t3.micro`, plus $0.04 an hour for step 4's four interface endpoints and a few cents of NAT processing for the test downloads. All three of my runs together cost well under a dollar. Set a budget alert anyway, and destroy it when you're done.
 
 ## What I'd look at next
 
-- Why GitHub failed through NAT64 and not over plain IPv4: a test over hours rather than an afternoon, and a look at whether large responses are the ones that go missing.
 - The other direction, getting in: an Application Load Balancer in front of instances in IPv6-only subnets, and how many public IPv4 addresses that really saves.
 - An IPv6 EKS cluster, the follow-up to [the IPv4 exhaustion article]({{< relref "articles/eks-ipv4-exhaustion" >}}), where image pulls from ECR are exactly the traffic this article is about.
 
