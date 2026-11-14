@@ -49,7 +49,7 @@ hdr()     { grep -i "^$2:" <<<"$1" | head -1 | cut -d: -f2- | sed 's/^ *//'; }
 echo "Smoke test: $url ($mode)"
 
 echo; echo "Pages"
-for path in / /articles/ /articles/eks-ipv4-exhaustion/ /portfolio/this-website/ /portfolio/eks-ipv4-lab/ /sitemap.xml /robots.txt /favicon.ico /favicon.svg /apple-touch-icon.png; do
+for path in / /articles/ /articles/eks-ipv4-exhaustion/ /articles/ipv6-on-aws-where-to-start/ /portfolio/this-website/ /portfolio/eks-ipv4-lab/ /portfolio/aws-ipv6-lab/ /sitemap.xml /robots.txt /favicon.ico /favicon.svg /apple-touch-icon.png; do
   code=$(status "$url$path")
   expect "$path returns 200 (got $code)" '[[ "$code" == 200 ]]'
 done
