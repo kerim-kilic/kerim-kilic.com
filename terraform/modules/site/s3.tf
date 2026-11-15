@@ -1,3 +1,11 @@
+# Accepted Trivy findings (sitting C of the 2026-11-15 security review):
+# - AWS-0089 access logging: off on purpose; the privacy page states that no access logs are kept.
+# - AWS-0090 versioning: every deploy rebuilds the site from git and rollback is a git revert; versions would only keep
+#   the copies the sync deletes.
+# - AWS-0132 customer-managed KMS key: the content is public; SSE-S3 is enough and avoids KMS cost and key policy for OAC.
+#trivy:ignore:AWS-0089
+#trivy:ignore:AWS-0090
+#trivy:ignore:AWS-0132
 resource "aws_s3_bucket" "site" {
   bucket = local.bucket_name
 

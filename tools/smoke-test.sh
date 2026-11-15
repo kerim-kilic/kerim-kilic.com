@@ -9,6 +9,10 @@
 #
 # Extra request headers (for example a Cloudflare Access service token when testing dev) can be passed
 # newline-separated in SMOKE_HEADERS. Exits non-zero if any check fails.
+#
+# Checks are passed to expect() as single-quoted strings and run with eval, so the single quotes are deliberate (SC2016)
+# and variables that appear only inside them are in fact used (SC2034).
+# shellcheck disable=SC2016,SC2034
 set -uo pipefail
 
 url="${1:-https://kerim-kilic.com}"

@@ -3,6 +3,8 @@
 # Pull requests target dev, not the default branch, so a change is tested there before it can reach main (and production).
 # A provider bump only changes the lock files: nothing is applied until the next manual terraform plan and apply.
 # Security updates may still target the default branch.
+# Cooldown: a new release is only proposed once it is 7 days old, so a compromised release that is pulled quickly never
+# reaches this repository.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
@@ -10,6 +12,8 @@ updates:
     target-branch: "dev"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
     groups:
       github-actions:
         patterns: ["*"]
@@ -22,6 +26,8 @@ updates:
     target-branch: "dev"
     schedule:
       interval: "monthly"
+    cooldown:
+      default-days: 7
     groups:
       terraform-providers:
         patterns: ["*"]

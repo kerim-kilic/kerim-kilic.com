@@ -21,6 +21,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: hashicorp/setup-terraform@v4
         with:
@@ -39,6 +41,8 @@ jobs:
         stack: [shared, dev, prod]
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: hashicorp/setup-terraform@v4
         with:

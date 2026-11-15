@@ -23,6 +23,11 @@ resource "aws_cloudfront_function" "rewrite" {
   })
 }
 
+# Accepted Trivy findings (sitting C of the 2026-11-15 security review):
+# - AWS-0010 access logging: off on purpose; the privacy page states that no access logs are kept.
+# - AWS-0011 WAF: a static site with no forms or back end; a web ACL would cost money and protect nothing.
+#trivy:ignore:AWS-0010
+#trivy:ignore:AWS-0011
 resource "aws_cloudfront_distribution" "site" {
   enabled             = true
   is_ipv6_enabled     = true
