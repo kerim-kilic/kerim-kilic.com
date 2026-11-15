@@ -9,12 +9,16 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Read-only by default. Only the deploy job may request an OIDC token (see its own permissions block), so the build
+# job, which runs Hugo and the theme's templates, can never assume the AWS role.
 permissions:
   contents: read
-  id-token: write # needed for AWS OIDC
 
 env:
+  # Upgrading Hugo changes both lines: the SHA-256 is the line for hugo_extended_<version>_linux-amd64.tar.gz in
+  # hugo_<version>_checksums.txt on the release page.
   HUGO_VERSION: "0.166.0"
+  HUGO_SHA256: "0e39b901e3f919f1daae05c8ff64f0c14c8a348ef46886d63f8e6d1bb2653885"
 
 jobs:
   build:
@@ -37,11 +41,19 @@ jobs:
           echo "target=$target" >> "$GITHUB_OUTPUT"
           echo "Target environment: $target" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Set up Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: ${{ env.HUGO_VERSION }}
-          extended: true
+      - name: Install Hugo (checksum-verified)
+        run: |
+          set -euo pipefail
+          f="hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          curl -fsSLO "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/$f"
+          echo "$HUGO_SHA256  $f" | sha256sum -c -
+          mkdir -p "$HOME/.local/hugo"
+          tar -xzf "$f" -C "$HOME/.local/hugo" hugo
+          rm "$f"
+          echo "$HOME/.local/hugo" >> "$GITHUB_PATH"
+
+      - name: Hugo version
+        run: hugo version
 
       - name: Build (public)
         if: steps.target.outputs.target != 'dev'
@@ -66,6 +78,9 @@ jobs:
     concurrency:
       group: deploy-${{ needs.build.outputs.target }}
       cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write # needed for AWS OIDC
     env:
       # Repository variables and secrets are prefixed per environment: DEV_* and PROD_*
       PREFIX: ${{ needs.build.outputs.target == 'prod' && 'PROD' || 'DEV' }}
@@ -89,8 +104,9 @@ jobs:
           set -euo pipefail
           dest="s3://$BUCKET"
 
-          # Fingerprinted assets (hash in the filename): safe to cache for a year.
-          aws s3 sync public/ "$dest" --delete \
+          # Fingerprinted assets (hash in the filename): safe to cache for a year. Uploaded first and without
+          # --delete, so the old files stay until the new HTML that stops referencing them is in place (last pass).
+          aws s3 sync public/ "$dest" \
             --exclude "*" --include "css/*" --include "images/*" \
             --cache-control "public, max-age=31536000, immutable"
 
@@ -104,6 +120,11 @@ jobs:
           aws s3 sync public/ "$dest" --delete \
             --exclude "css/*" --exclude "images/*" --exclude "fonts/*" --exclude "og/*" \
             --cache-control "public, max-age=0, s-maxage=86400, must-revalidate"
+
+          # Now that the HTML points at the new fingerprinted files, remove the old ones. Uploads nothing new.
+          aws s3 sync public/ "$dest" --delete \
+            --exclude "*" --include "css/*" --include "images/*" \
+            --cache-control "public, max-age=31536000, immutable"
 
       - name: Invalidate CloudFront
         run: |

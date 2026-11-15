@@ -54,6 +54,16 @@ code=$(status "$url/this-page-does-not-exist/")
 expect "a missing page returns a real 404 (got $code)" '[[ "$code" == 404 ]]'
 expect "the 404 page is the site's own" 'body "$url/this-page-does-not-exist/" | grep -qi "page not found"'
 
+echo; echo "security.txt (RFC 9116)"
+sectxt_url="$url/.well-known/security.txt"
+code=$(status "$sectxt_url")
+expect "/.well-known/security.txt returns 200 (got $code)" '[[ "$code" == 200 ]]'
+sectype=$(hdr "$(headers "$sectxt_url")" content-type)
+expect "security.txt is served as text/plain ($sectype)" '[[ "$sectype" == text/plain* ]]'
+expires=$(body "$sectxt_url" | tr -d '\r' | sed -nE 's/^Expires: *//p' | head -1)
+expires_epoch=$(date -d "$expires" +%s 2>/dev/null || echo 0)
+expect "security.txt Expires is more than 30 days away ($expires)" '(( expires_epoch > $(date +%s) + 30 * 86400 ))'
+
 echo; echo "Environment (catches a dev build on prod, or the reverse)"
 html=$(body "$url/" | tr -d "\"'")
 canonical=$(sed -nE 's/.*rel=canonical href=([^ >]+).*/\1/p' <<<"$html" | head -1)

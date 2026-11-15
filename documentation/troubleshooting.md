@@ -12,6 +12,9 @@ account.
 | "Credentials could not be loaded", or an empty role | A repository variable or the role ARN secret is missing or misspelled (`DEV_`/`PROD_` prefix) | Check Settings, Secrets and variables, Actions, in both the Variables and Secrets tabs |
 | Deploy is green but the site shows the old content | The CloudFront invalidation hasn't finished, or the browser cached the page | Wait a minute and hard-refresh; check `aws cloudfront list-invalidations` |
 | The whole workflow is rejected as invalid YAML | An unquoted step name containing `: ` | Quote the step name |
+| `Could not fetch an OIDC token` at "Configure AWS credentials" | The job lacks `id-token: write` (granted to the `deploy` job only, on purpose) | Keep the AWS steps in the `deploy` job, or add the permission to that job's own `permissions` block |
+| "Install Hugo" fails with `checksum did NOT match` | `HUGO_VERSION` was changed without `HUGO_SHA256`, or the release file changed | Take the hash for `hugo_extended_<version>_linux-amd64.tar.gz` from that release's `hugo_<version>_checksums.txt` and update both lines together |
+| A pull request waits on `format` or `validate (...)` as "Expected" | The Terraform checks run on `push` only and report on the head commit; the commit was never pushed to this repository (for example, a pull request from a fork) | Push the branch to this repository, or re-run the checks on it |
 
 **See the exact subject GitHub sent** (works even though the request was refused): CloudTrail records the failed attempt in
 the region the runner called.
