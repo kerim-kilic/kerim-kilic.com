@@ -74,7 +74,17 @@ its own cache. This was accepted, and prod is verified after every infrastructur
 ## Deployment
 
 `.github/workflows/deploy.yml`: build with Hugo, then (except for pull requests) assume the environment's IAM role through
-GitHub OIDC, sync to S3 in three passes with different `Cache-Control` values, and invalidate CloudFront.
+GitHub OIDC, sync to S3 with different `Cache-Control` values per file class, and invalidate CloudFront.
+
+- **Only the deploy job can request an OIDC token.** The workflow's default permissions are read-only, and
+  `id-token: write` is granted to the `deploy` job alone. The `build` job, which runs Hugo and the site's templates, can
+  never assume the AWS role.
+- **Hugo is installed from the official release and checked against a pinned SHA-256** (`HUGO_VERSION` and `HUGO_SHA256`
+  in the workflow's `env`; an upgrade changes both). No third-party setup action is involved, and a release file that
+  changed after it was pinned fails the build.
+- **Old fingerprinted files are removed last.** New `css/` and `images/` files are uploaded first, then fonts and share
+  images, then the HTML, and only then are the stale `css/` and `images/` files deleted, so a page that is already
+  cached never points at a stylesheet that has gone.
 
 - **No AWS keys in GitHub.** Each environment has its own role. The trust policy requires audience `sts.amazonaws.com` and
   a subject that names the exact repository and branch pattern. GitHub's subject claim now carries **immutable numeric
