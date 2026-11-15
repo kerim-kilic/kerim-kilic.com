@@ -68,6 +68,8 @@ jobs:
           name: site
           path: public
           retention-days: 7
+          # The default leaves out dot-directories, which would silently drop public/.well-known/security.txt.
+          include-hidden-files: true
 
   deploy:
     # Dependabot's branches only build (its pull requests are the check); they never deploy.
