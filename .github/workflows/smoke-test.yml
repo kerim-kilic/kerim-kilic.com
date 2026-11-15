@@ -1,0 +1,24 @@
+name: Smoke test (prod)
+
+# Weekly check of the live site, mainly for what can change without a commit: the certificate's remaining validity,
+# DNS, CloudFront and the response headers. Scheduled runs only start from the default branch (main), and GitHub emails
+# the owner when one fails. GitHub pauses schedules in a public repository after 60 days without activity.
+on:
+  schedule:
+    - cron: "17 6 * * 1" # Mondays, 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Smoke test
+        run: tools/smoke-test.sh https://kerim-kilic.com --www

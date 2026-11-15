@@ -97,6 +97,15 @@ GitHub OIDC, sync to S3 with different `Cache-Control` values per file class, an
   and to the Terraform provider lock files of the three environments (monthly, grouped). Its pull requests target `dev`,
   so a new version is deployed and tested there before it can reach `main`. Its own branches only build; they never
   deploy. A provider update changes only the lock files: it takes effect at the next manual `terraform plan` and apply.
+  A release is only proposed once it is seven days old (`cooldown`), so one that is pulled quickly never arrives.
+- **Workflow hygiene.** Checkouts don't keep the GitHub token in `.git/config` (`persist-credentials: false`; no job
+  pushes), and the deploy job names both role-ARN secrets explicitly instead of computing the name, so GitHub only
+  hands it the secrets it uses. Actions from GitHub, AWS and HashiCorp stay on major tags; any other publisher's action
+  is pinned to a commit SHA, which zizmor enforces.
+- **Static checks on every push** (`lint.yml`): TFLint, Trivy's config scan, actionlint, zizmor and ShellCheck. Trivy's
+  accepted findings are suppressed in the Terraform with the reason next to them: no access logging (the privacy page
+  promises none), no WAF (nothing dynamic to protect), no bucket versioning (git is the history), and SSE-S3 rather than
+  a customer-managed KMS key (the content is public).
 - **Repository variables** select the target: `AWS_REGION`, and the `DEV_` / `PROD_` bucket name and distribution ID. The
   `DEV_` / `PROD_` role ARN is a repository **secret**, only so that it is masked in public logs (an ARN contains the AWS
   account ID). None of these values is a credential.
@@ -116,7 +125,7 @@ GitHub OIDC, sync to S3 with different `Cache-Control` values per file class, an
 | Deploy roles per environment, trust defined in Terraform | A feature branch can never write to the production bucket, and the rule is enforced in AWS, not in a GitHub setting |
 | `DEV_` / `PROD_` repository variables and secrets instead of GitHub Environments | Keeps the OIDC subject as `ref:refs/heads/...` so the trust conditions stay in code |
 | State in S3 with native locking | No extra lock table; the bucket can be shared by other projects through per-project key prefixes |
-| Smoke-test production after infrastructure changes | Covers the dev/prod difference cheaply |
+| Smoke-test production after infrastructure changes, and weekly on a schedule | Covers the dev/prod difference cheaply, and catches what changes without a commit (certificate, DNS) |
 
 ## Limits worth knowing
 

@@ -27,6 +27,8 @@ jobs:
       target: ${{ steps.target.outputs.target }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false # nothing in this job pushes to git
 
       - name: Pick target environment
         id: target
@@ -96,7 +98,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6
         with:
           # A secret, not a variable, so the ARN (which contains the AWS account ID) is masked in public logs.
-          role-to-assume: ${{ secrets[format('{0}_AWS_ROLE_ARN', env.PREFIX)] }}
+          # Both names spelled out: a computed name (secrets[format(...)]) would expose every repository secret to the job.
+          role-to-assume: ${{ env.PREFIX == 'PROD' && secrets.PROD_AWS_ROLE_ARN || secrets.DEV_AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Sync to S3
@@ -129,7 +132,9 @@ jobs:
             --cache-control "public, max-age=31536000, immutable"
 
       - name: Invalidate CloudFront
+        env:
+          DISTRIBUTION_ID: ${{ vars[format('{0}_CLOUDFRONT_DISTRIBUTION_ID', env.PREFIX)] }}
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id "${{ vars[format('{0}_CLOUDFRONT_DISTRIBUTION_ID', env.PREFIX)] }}" \
+            --distribution-id "$DISTRIBUTION_ID" \
             --paths "/*"
