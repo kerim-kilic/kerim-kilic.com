@@ -1,10 +1,11 @@
 name: Terraform checks
 
 # Format and validity checks for the Terraform code. They need no cloud credentials and never plan or apply anything.
-# They run on every pull request and push (no path filter), so they can be required checks on main: a path-filtered check
-# would never report on a pull request that doesn't touch terraform/ and would block its merge.
+# They run on every push to any branch (no path filter), so they can be required checks on main: a pull request's head
+# commit has always been pushed first, so the push run reports on it, and GitHub matches required checks by commit.
+# A pull_request trigger as well would only run everything twice. A path-filtered check would never report on a pull
+# request that doesn't touch terraform/ and would block its merge.
 on:
-  pull_request:
   push:
 
 permissions:
