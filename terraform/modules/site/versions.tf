@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 1.11" # same floor as the environments that call this module
+
   required_providers {
     aws = {
       source                = "hashicorp/aws"

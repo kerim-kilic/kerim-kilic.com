@@ -212,6 +212,18 @@ Google, or ask for a one-time code sent to that address. To revoke someone, remo
 - Terraform changes are checked on every push to any branch (formatting and validation, no credentials) by
   `.github/workflows/terraform-checks.yml`. A pull request's checks come from the push run on its head commit. Nothing
   is planned or applied in CI.
+- `.github/workflows/lint.yml` runs on every push too: TFLint (config in `terraform/.tflint.hcl`), Trivy's config scan
+  of `terraform/`, actionlint and zizmor for the workflows (zizmor's policy in `.github/zizmor.yml`), and ShellCheck for
+  `tools/*.sh`. Accepted findings are suppressed inline with a reason. To run them locally:
+
+  ```bash
+  tflint --chdir=terraform --init --config="$PWD/terraform/.tflint.hcl"
+  tflint --chdir=terraform --recursive --config="$PWD/terraform/.tflint.hcl"
+  docker run --rm -v "$PWD:/repo:ro" -w /repo aquasec/trivy:0.76.2 config terraform/   # scans local tfvars too
+  docker run --rm -v "$PWD:/repo:ro" -w /repo rhysd/actionlint:1.7.12
+  docker run --rm -v "$PWD:/repo:ro" -w /repo ghcr.io/zizmorcore/zizmor:1.32.0 --offline .
+  shellcheck tools/*.sh
+  ```
 - Only the OIDC provider is shared between environments, and it lives in `envs/shared` so destroying dev can't break prod.
 - The dev apply changes Cloudflare Access and the two rulesets in your zone, none of which prod needs. Prod only
   writes DNS records.
@@ -258,6 +270,10 @@ infrastructure change:
 ```bash
 tools/smoke-test.sh https://kerim-kilic.com --www
 ```
+
+The same test also runs every Monday from `.github/workflows/smoke-test.yml` (and on demand from the Actions tab), so
+things that change without a commit, such as the certificate's remaining validity, are caught too. GitHub emails the
+repository owner when a scheduled run fails.
 
 It checks that the pages and 404 behave, that this is the prod build (not dev), that Cloudflare didn't rewrite the
 email link, the HTTPS redirect, the `www` redirect, the security and cache headers, and that the certificate is the ACM
