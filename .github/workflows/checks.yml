@@ -1,0 +1,29 @@
+name: Checks
+
+# Static checks for the Terraform, the workflows and the scripts, run by the reusable workflows in kerim-kilic/ci-workflows
+# (the same checks every lab repository uses). No cloud credentials: nothing is planned or applied.
+# On every push to any branch, with no path filter, so every check reports on every pull request and can be required on
+# main: a pull request's head commit has always been pushed first, so the push run reports on it, and GitHub matches
+# required checks by commit. A pull_request trigger as well would only run everything twice.
+# The calls are pinned to a release's commit SHA, with the tag as a comment; Dependabot proposes new releases.
+on:
+  push:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  terraform:
+    uses: kerim-kilic/ci-workflows/.github/workflows/terraform.yml@621f9590bd4b4509da7a47a91cbabc6de9f9284c # v1.0.0
+    with:
+      validate-directories: '["envs/shared", "envs/dev", "envs/prod"]'
+      tflint-recursive: true
+
+  repo:
+    uses: kerim-kilic/ci-workflows/.github/workflows/repo-checks.yml@621f9590bd4b4509da7a47a91cbabc6de9f9284c # v1.0.0
+    with:
+      shellcheck-paths: tools/*.sh

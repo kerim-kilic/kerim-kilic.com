@@ -209,12 +209,13 @@ Google, or ask for a one-time code sent to that address. To revoke someone, remo
 - Terraform runs from your machine, not from GitHub Actions: the credentials it needs (broad AWS access, a Cloudflare
   token that can edit Access and rules) don't belong in a public repo's secrets, and Terraform creates the roles the
   workflow itself uses.
-- Terraform changes are checked on every push to any branch (formatting and validation, no credentials) by
-  `.github/workflows/terraform-checks.yml`. A pull request's checks come from the push run on its head commit. Nothing
-  is planned or applied in CI.
-- `.github/workflows/lint.yml` runs on every push too: TFLint (config in `terraform/.tflint.hcl`), Trivy's config scan
-  of `terraform/`, actionlint and zizmor for the workflows (zizmor's policy in `.github/zizmor.yml`), and ShellCheck for
-  `tools/*.sh`. Accepted findings are suppressed inline with a reason. To run them locally:
+- Every push to any branch runs `.github/workflows/checks.yml` (no credentials; nothing is planned or applied in CI).
+  It calls the reusable workflows in [kerim-kilic/ci-workflows](https://github.com/kerim-kilic/ci-workflows), pinned
+  to a release: `terraform fmt` and `validate` for shared, dev and prod, TFLint (config in `terraform/.tflint.hcl`),
+  Trivy's config scan of `terraform/`, actionlint and zizmor for the workflows (zizmor's policy in
+  `.github/zizmor.yml`), and ShellCheck for `tools/*.sh`. A pull request's checks come from the push run on its head
+  commit. Accepted findings are suppressed inline with a reason. To run them locally (tool versions as in that
+  release's `tools/` folder):
 
   ```bash
   tflint --chdir=terraform --init --config="$PWD/terraform/.tflint.hcl"
