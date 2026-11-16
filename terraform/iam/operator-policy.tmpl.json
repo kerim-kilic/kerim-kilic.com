@@ -30,7 +30,10 @@
         "cloudfront:CreateFunction",
         "cloudfront:UpdateFunction",
         "cloudfront:PublishFunction",
-        "cloudfront:DeleteFunction"
+        "cloudfront:DeleteFunction",
+        "cloudfront:CreateResponseHeadersPolicy",
+        "cloudfront:UpdateResponseHeadersPolicy",
+        "cloudfront:DeleteResponseHeadersPolicy"
       ],
       "Resource": "*"
     },
@@ -50,16 +53,29 @@
       "Sid": "DeployRoles",
       "Effect": "Allow",
       "Action": [
-        "iam:CreateRole",
         "iam:DeleteRole",
         "iam:UpdateRole",
         "iam:UpdateAssumeRolePolicy",
         "iam:TagRole",
         "iam:UntagRole",
-        "iam:PutRolePolicy",
         "iam:DeleteRolePolicy"
       ],
       "Resource": "arn:aws:iam::ACCOUNT_ID:role/*kerim-kilic-com-site-deploy"
+    },
+    {
+      "Sid": "DeployRolesWithBoundary",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:PutRolePolicy",
+        "iam:PutRolePermissionsBoundary"
+      ],
+      "Resource": "arn:aws:iam::ACCOUNT_ID:role/*kerim-kilic-com-site-deploy",
+      "Condition": {
+        "StringEquals": {
+          "iam:PermissionsBoundary": "arn:aws:iam::ACCOUNT_ID:policy/website-deploy-boundary"
+        }
+      }
     },
     {
       "Sid": "GitHubOidcProvider",

@@ -48,7 +48,7 @@ function handler(event) {
     return {
       statusCode: 301,
       statusDescription: 'Moved Permanently',
-      headers: { location: { value: 'https://' + host.substring(4) + request.uri } }
+      headers: { location: { value: 'https://' + host.substring(4) + request.uri + queryString(request.querystring) } }
     };
   }
 
@@ -59,6 +59,18 @@ function handler(event) {
     request.uri += '/index.html';
   }
   return request;
+}
+
+// CloudFront hands the function a parsed query string, so the redirect has to put it back together.
+function queryString(query) {
+  var parts = [];
+  for (var key in query) {
+    var values = query[key].multiValue || [query[key]];
+    values.forEach(function (v) {
+      parts.push(v.value === '' ? key : key + '=' + v.value);
+    });
+  }
+  return parts.length ? '?' + parts.join('&') : '';
 }
 ```
 
@@ -88,7 +100,7 @@ condition {
 }
 ```
 
-For production, `deploy_ref_patterns` is `["refs/heads/main"]`, so only the `main` branch of this repository can assume the role. The role's permissions are small too: list the bucket, put and delete objects in it, and create an invalidation on this one distribution. Even if the role were misused, the worst outcome is a defaced website, not a compromised AWS account.
+For production, `deploy_ref_patterns` is `["refs/heads/main"]`, so only the `main` branch of this repository can assume the role. The role's permissions are small too: list the bucket, put and delete objects in it, and create an invalidation on this one distribution. Even if the role were misused, the worst outcome is a defaced website, not a compromised AWS account. The role also carries a permissions boundary, a policy I created by hand that caps what it can ever be given, so not even a mistake in the Terraform can widen it.
 
 Three things I learnt setting this up:
 
@@ -124,7 +136,7 @@ The site itself is one module, `modules/site`, that takes a hostname and produce
 | Path | What it defines |
 |------|-----------------|
 | `modules/site/s3.tf` | The private bucket, Block Public Access and the bucket policy that trusts CloudFront |
-| `modules/site/cloudfront.tf` | The distribution, origin access control, the function, and the managed cache and security-header policies |
+| `modules/site/cloudfront.tf` | The distribution, origin access control, the function, the managed cache policy and the security-headers policy |
 | `modules/site/dns.tf` | The ACM certificate, its validation records and the site records in Cloudflare |
 | `modules/site/github_oidc.tf` | The deploy role and its permissions |
 | `modules/site/function.js.tftpl` | The CloudFront Function shown above, as a template |
@@ -137,7 +149,7 @@ State is stored in a private, versioned S3 bucket, with one key per environment.
 ## What I would change next
 
 - Run Terraform in CI, not only the checks. Pull requests already get format and validation checks, which need no credentials. But I still run `terraform plan` and `apply` from my laptop, because the credentials they need are too powerful to hand to a public repository's workflows. The next step is plans on pull requests and applies on merge, using a separate, narrowly scoped role.
-- Add a Content-Security-Policy. The managed security-headers policy covers HSTS, content-type sniffing, framing and referrer policy, but not CSP. The site is static and self-hosted, fonts included, so a strict CSP should be easy to add.
+- Tighten the Content-Security-Policy. The site has no scripts and loads everything from its own domain, fonts included, so the policy allows only same-origin styles, images and fonts. It still allows inline styles, because the code highlighting and the diagrams use `style` attributes. Moving those into the stylesheet would let me drop that too.
 - Pin the GitHub Actions to commit SHAs. They follow major-version tags and Dependabot proposes updates, but a maintainer can move a tag and nobody can move a commit SHA.
 - Logging. There are no access logs or alerts yet.
 

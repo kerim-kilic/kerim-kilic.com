@@ -118,6 +118,21 @@ if [[ "$scheme" == https ]]; then
     expect "www redirects to the apex ($wwwloc)" '[[ "$wwwloc" == "301 $url/articles/" ]]'
   fi
 
+  # Security headers from the custom response-headers policy.
+  csp=$(hdr "$resp" content-security-policy)
+  csp_start="default-src 'none'"
+  expect "Content-Security-Policy is set and starts with $csp_start" '[[ "$csp" == "$csp_start"* ]]'
+  expect "Strict-Transport-Security includes subdomains" '[[ "$(hdr "$resp" strict-transport-security)" == *[Ii]nclude[Ss]ub[Dd]omains* ]]'
+  expect "X-Frame-Options is DENY" '[[ "$(hdr "$resp" x-frame-options)" == DENY ]]'
+  expect "Permissions-Policy is set" '[[ -n "$(hdr "$resp" permissions-policy)" ]]'
+
+  # www redirect keeps the query string, still percent-encoded. One parameter only: CloudFront hands the function a
+  # parsed query string, so the order of several parameters is not kept.
+  if [[ "$check_www" == 1 && "$mode" == prod ]]; then
+    wwwqs=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "https://www.$host/articles/?q=c%20d")
+    expect "www redirect keeps the query string ($wwwqs)" '[[ "$wwwqs" == "301 $url/articles/?q=c%20d" ]]'
+  fi
+
   echo; echo "Certificate and edge"
   certinfo=$(echo | openssl s_client -servername "$host" -connect "$host:443" 2>/dev/null | openssl x509 -noout -issuer -enddate -ext subjectAltName 2>/dev/null)
   issuer=$(grep -i '^issuer' <<<"$certinfo" | head -1)
