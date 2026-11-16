@@ -21,7 +21,8 @@ browser --> CloudFront --> S3 (private bucket, origin access control)
   only same-origin styles, images and fonts (no scripts; inline styles are allowed for the code highlighting and the SVG
   diagrams), HSTS for a year including subdomains (not preloaded), `X-Frame-Options: DENY`, `nosniff`,
   `strict-origin-when-cross-origin` and a Permissions-Policy that turns off camera, microphone and location.
-- The `www` redirect keeps the path and the query string.
+- The `www` redirect keeps the path and the query string (values stay percent-encoded; the order of parameters may
+  change, because CloudFront hands the function a parsed query string).
 - HTML is cached at the edge until the next deploy invalidates it and revalidated by browsers; fingerprinted CSS and
   images are cached for a year; fonts and share images for a day (see [Deployment](#deployment)).
 

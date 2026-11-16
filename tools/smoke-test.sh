@@ -126,10 +126,11 @@ if [[ "$scheme" == https ]]; then
   expect "X-Frame-Options is DENY" '[[ "$(hdr "$resp" x-frame-options)" == DENY ]]'
   expect "Permissions-Policy is set" '[[ -n "$(hdr "$resp" permissions-policy)" ]]'
 
-  # www redirect keeps the query string.
+  # www redirect keeps the query string, still percent-encoded. One parameter only: CloudFront hands the function a
+  # parsed query string, so the order of several parameters is not kept.
   if [[ "$check_www" == 1 && "$mode" == prod ]]; then
-    wwwqs=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "https://www.$host/articles/?a=1&b=c%20d")
-    expect "www redirect keeps the query string ($wwwqs)" '[[ "$wwwqs" == "301 $url/articles/?a=1&b=c%20d" ]]'
+    wwwqs=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "https://www.$host/articles/?q=c%20d")
+    expect "www redirect keeps the query string ($wwwqs)" '[[ "$wwwqs" == "301 $url/articles/?q=c%20d" ]]'
   fi
 
   echo; echo "Certificate and edge"
