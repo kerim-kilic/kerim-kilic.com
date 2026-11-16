@@ -8,7 +8,7 @@ Terraform, and keyless deployments from GitHub Actions. Two environments come fr
 ```
 browser --> CloudFront --> S3 (private bucket, origin access control)
               |  viewer-request function: clean URLs (+ www redirect on prod, + secret-header check on dev)
-              |  TLS with an ACM certificate (us-east-1), managed cache and security-header policies
+              |  TLS with an ACM certificate (us-east-1), managed cache policy, custom security-headers policy
               `- 403/404 from S3 are mapped to /404.html with status 404
 ```
 
@@ -17,6 +17,11 @@ browser --> CloudFront --> S3 (private bucket, origin access control)
   `/404.html` and returns a real 404 status.
 - The CloudFront Function (`terraform/modules/site/function.js.tftpl`) rewrites `/x/` to `/x/index.html` and `/x` to
   `/x/index.html`, because neither CloudFront nor the S3 REST endpoint maps folders to index documents.
+- Every response carries security headers from a custom response-headers policy: a Content-Security-Policy that allows
+  only same-origin styles, images and fonts (no scripts; inline styles are allowed for the code highlighting and the SVG
+  diagrams), HSTS for a year including subdomains (not preloaded), `X-Frame-Options: DENY`, `nosniff`,
+  `strict-origin-when-cross-origin` and a Permissions-Policy that turns off camera, microphone and location.
+- The `www` redirect keeps the path and the query string.
 - HTML is cached at the edge until the next deploy invalidates it and revalidated by browsers; fingerprinted CSS and
   images are cached for a year; fonts and share images for a day (see [Deployment](#deployment)).
 
@@ -92,7 +97,9 @@ GitHub OIDC, sync to S3 with different `Cache-Control` values per file class, an
   in the git-ignored `terraform.tfvars`). This also stops someone who later recreates an account or repository with the
   same name from inheriting the trust.
 - **Role permissions are minimal:** list, put and delete objects in its own bucket, and create an invalidation on its own
-  distribution.
+  distribution. Each role also has a **permissions boundary** (`website-deploy-boundary`, created by hand, template in
+  `terraform/iam/deploy-boundary.tmpl.json`) that caps it at exactly those actions on the site buckets and
+  distributions, whatever policy it is given.
 - **Dependencies stay current.** Dependabot proposes updates to the GitHub Actions the workflow uses (weekly, grouped)
   and to the Terraform provider lock files of the three environments (monthly, grouped). Its pull requests target `dev`,
   so a new version is deployed and tested there before it can reach `main`. Its own branches only build; they never
@@ -131,8 +138,10 @@ GitHub OIDC, sync to S3 with different `Cache-Control` values per file class, an
 
 ## Limits worth knowing
 
-- A policy that can create IAM roles is effectively admin-equivalent, so the operator policy limits mistakes, not the
-  impact of a stolen credential. MFA and short-lived keys are the real protection.
+- The operator policy can create and change the deploy roles, but only with the deploy boundary attached, and it can't
+  remove or edit that boundary. So it can no longer be used to make an admin role. A stolen operator credential could
+  still change a deploy role's trust policy (letting another identity deploy the site) and change the site's own
+  resources. MFA and short-lived keys remain the real protection.
 - Some CloudFront actions can't be scoped to a resource that doesn't exist yet, so that statement uses `Resource: "*"`.
 - The operator policy was derived from the Terraform code and its action names were checked against AWS's published
   list. It has been used to apply the dev environment; tune it by adding any action an `AccessDenied` error names.
