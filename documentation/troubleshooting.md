@@ -59,6 +59,7 @@ curl -sI https://<distribution>.cloudfront.net/ # 403: the secret-header check c
 | Init asks for a bucket name | The backend is initialised without its config | `terraform init -backend-config=../../backend.hcl` |
 | Cloudflare "Missing X-Auth-Key, X-Auth-Email or Authorization headers" | The API token isn't set in that shell | `read -rs CLOUDFLARE_API_TOKEN && export CLOUDFLARE_API_TOKEN` |
 | `AccessDenied` on an AWS action | The operator policy lacks that action | Add the action the error names, then re-run |
+| `AccessDenied` on `iam:CreateRole`, `iam:PutRolePolicy` or `iam:PutRolePermissionsBoundary` | The `website-deploy-boundary` policy doesn't exist, has another name, or the role doesn't carry it yet | Create the boundary as described in `terraform/iam/README.md`; the operator may only write deploy roles that carry it |
 | Writes to the state bucket denied | A placeholder was left unreplaced in the policy | Re-read the live policy version and check both bucket statements |
 | A stale state lock after an interrupted run | The run died mid-apply | `terraform force-unlock <lock id>` once you're sure nothing is running |
 | `InvalidClientTokenId` right after creating an access key | The new key hasn't propagated | Wait up to a minute and retry |

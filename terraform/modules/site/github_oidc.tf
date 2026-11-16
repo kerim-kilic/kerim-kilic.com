@@ -35,9 +35,12 @@ data "aws_iam_policy_document" "deploy_trust" {
   }
 }
 
+# The boundary is created by hand as root (terraform/iam/deploy-boundary.tmpl.json), so the operator running Terraform
+# can neither change it nor create a deploy role without it.
 resource "aws_iam_role" "deploy" {
-  name               = "${local.bucket_name}-deploy"
-  assume_role_policy = data.aws_iam_policy_document.deploy_trust.json
+  name                 = "${local.bucket_name}-deploy"
+  assume_role_policy   = data.aws_iam_policy_document.deploy_trust.json
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/website-deploy-boundary"
 }
 
 data "aws_iam_policy_document" "deploy" {

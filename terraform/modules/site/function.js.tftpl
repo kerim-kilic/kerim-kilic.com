@@ -22,7 +22,7 @@ function handler(event) {
     return {
       statusCode: 301,
       statusDescription: 'Moved Permanently',
-      headers: { location: { value: 'https://' + host.substring(4) + request.uri } }
+      headers: { location: { value: 'https://' + host.substring(4) + request.uri + queryString(request.querystring) } }
     };
   }
 %{ endif ~}
@@ -35,3 +35,18 @@ function handler(event) {
   }
   return request;
 }
+%{ if www_redirect ~}
+
+// Rebuilds the query string for the redirect from CloudFront's parsed form. Keys and values are copied as CloudFront
+// provides them; a repeated key arrives once, with all its values in multiValue.
+function queryString(query) {
+  var parts = [];
+  for (var key in query) {
+    var values = query[key].multiValue || [query[key]];
+    values.forEach(function (v) {
+      parts.push(v.value === '' ? key : key + '=' + v.value);
+    });
+  }
+  return parts.length ? '?' + parts.join('&') : '';
+}
+%{ endif ~}
