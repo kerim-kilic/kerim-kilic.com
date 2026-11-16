@@ -102,7 +102,9 @@ GitHub OIDC, sync to S3 with different `Cache-Control` values per file class, an
   pushes), and the deploy job names both role-ARN secrets explicitly instead of computing the name, so GitHub only
   hands it the secrets it uses. Actions from GitHub, AWS and HashiCorp stay on major tags; any other publisher's action
   is pinned to a commit SHA, which zizmor enforces.
-- **Static checks on every push** (`lint.yml`): TFLint, Trivy's config scan, actionlint, zizmor and ShellCheck. Trivy's
+- **Static checks on every push** (`checks.yml`, which calls the reusable workflows in
+  [kerim-kilic/ci-workflows](https://github.com/kerim-kilic/ci-workflows), pinned to a release's commit SHA):
+  `terraform fmt` and `validate`, TFLint, Trivy's config scan, actionlint, zizmor and ShellCheck. Trivy's
   accepted findings are suppressed in the Terraform with the reason next to them: no access logging (the privacy page
   promises none), no WAF (nothing dynamic to protect), no bucket versioning (git is the history), and SSE-S3 rather than
   a customer-managed KMS key (the content is public).
