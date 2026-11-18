@@ -7,48 +7,48 @@
     <symbol id="rt-tgw" viewBox="0 0 64 64"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill="#8C4FFF"><rect x="0" y="0" width="64" height="64"></rect></g><path d="M34.885,50.757 C35.572,50.039 36,49.07 36,48 C36,46.142 34.721,44.59 33,44.142 L33,38.92 C36.059,38.48 38.48,36.059 38.92,33 L44.143,33 C44.589,34.72 46.142,36 48,36 C49.071,36 50.039,35.572 50.757,34.885 C49.505,43.05 43.051,49.505 34.885,50.757 M13.243,34.885 C13.961,35.572 14.93,36 16,36 C17.859,36 19.411,34.72 19.858,33 L25.08,33 C25.521,36.059 27.942,38.48 31,38.92 L31,44.142 C29.28,44.59 28,46.142 28,48 C28,49.07 28.428,50.039 29.115,50.757 C20.949,49.505 14.495,43.05 13.243,34.885 M18,32 C18,33.103 17.103,34 16,34 C14.898,34 14,33.103 14,32 C14,30.897 14.898,30 16,30 C17.103,30 18,30.897 18,32 M29.115,13.243 C28.428,13.962 28,14.93 28,16 C28,17.859 29.28,19.411 31,19.858 L31,25.08 C27.942,25.521 25.521,27.941 25.08,31 L19.858,31 C19.411,29.28 17.859,28 16,28 C14.93,28 13.961,28.428 13.243,29.115 C14.495,20.95 20.949,14.496 29.115,13.243 M32,14 C33.103,14 34,14.897 34,16 C34,17.103 33.103,18 32,18 C30.898,18 30,17.103 30,16 C30,14.897 30.898,14 32,14 M32,37 C29.243,37 27,34.757 27,32 C27,29.243 29.243,27 32,27 C34.757,27 37,29.243 37,32 C37,34.757 34.757,37 32,37 M32,50 C30.898,50 30,49.103 30,48 C30,46.897 30.898,46 32,46 C33.103,46 34,46.897 34,48 C34,49.103 33.103,50 32,50 M50,32 C50,33.103 49.103,34 48,34 C46.898,34 46,33.103 46,32 C46,30.897 46.898,30 48,30 C49.103,30 50,30.897 50,32 M50.757,29.115 C50.039,28.428 49.071,28 48,28 C46.142,28 44.589,29.28 44.143,31 L38.92,31 C38.48,27.941 36.059,25.521 33,25.08 L33,19.858 C34.721,19.411 36,17.859 36,16 C36,14.93 35.572,13.962 34.885,13.243 C43.051,14.496 49.505,20.95 50.757,29.115 M32,11 C20.421,11 11,20.421 11,32 C11,43.58 20.421,53 32,53 C43.579,53 53,43.58 53,32 C53,20.421 43.579,11 32,11" fill="#FFFFFF"></path></g></symbol>
   </defs>
   <!-- AWS Architecture Icons (AWS Transit Gateway, Amazon EC2, Amazon VPC, Elastic Load Balancing) (c) Amazon Web Services, Inc. Embedded unmodified, scaled only. https://aws.amazon.com/architecture/icons/ -->
-  <rect x="600" y="20" width="190" height="70" rx="8" style="fill:var(--surface)" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
+  <rect x="600" y="20" width="190" height="70" rx="8" class="d-surface" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
   <use href="#rt-tgw" x="612" y="38" width="30" height="30"/>
   <text x="652" y="44" font-weight="600" fill="currentColor">Private networks</text>
-  <text x="652" y="61" font-size="11" style="fill:var(--muted)">transit gateway or</text>
-  <text x="652" y="75" font-size="11" style="fill:var(--muted)">Direct Connect</text>
-  <rect x="600" y="206" width="190" height="56" rx="8" style="fill:var(--surface)" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
+  <text x="652" y="61" font-size="11" class="d-muted">transit gateway or</text>
+  <text x="652" y="75" font-size="11" class="d-muted">Direct Connect</text>
+  <rect x="600" y="206" width="190" height="56" rx="8" class="d-surface" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
   <text x="695" y="230" text-anchor="middle" font-weight="600" fill="currentColor">Internet</text>
-  <text x="695" y="248" text-anchor="middle" font-size="11" style="fill:var(--muted)">through the NAT gateway</text>
+  <text x="695" y="248" text-anchor="middle" font-size="11" class="d-muted">through the NAT gateway</text>
   <rect x="20" y="100" width="560" height="292" rx="10" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-dasharray="5 4"/>
   <use href="#rt-vpc" x="32" y="108" width="22" height="22"/>
   <text x="62" y="124" font-weight="600" fill="currentColor">VPC</text>
-  <text x="300" y="124" font-size="11" style="fill:var(--muted)">primary range: 10.20.0.0/24, routable</text>
+  <text x="300" y="124" font-size="11" class="d-muted">primary range: 10.20.0.0/24, routable</text>
   <rect x="36" y="136" width="294" height="126" rx="8" fill="none" stroke="currentColor" stroke-opacity=".35"/>
-  <text x="48" y="153" font-size="11" style="fill:var(--muted)">private subnet</text>
-  <rect x="52" y="162" width="120" height="88" rx="6" style="fill:var(--surface)" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
+  <text x="48" y="153" font-size="11" class="d-muted">private subnet</text>
+  <rect x="52" y="162" width="120" height="88" rx="6" class="d-surface" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
   <use href="#rt-elb" x="98.0" y="170" width="28" height="28"/>
   <text x="112.0" y="218" text-anchor="middle" font-weight="600" fill="currentColor">Load balancer</text>
-  <text x="112.0" y="235" text-anchor="middle" font-size="11" style="fill:var(--muted)">internal</text>
-  <rect x="196" y="162" width="120" height="88" rx="6" style="fill:var(--surface)" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
+  <text x="112.0" y="235" text-anchor="middle" font-size="11" class="d-muted">internal</text>
+  <rect x="196" y="162" width="120" height="88" rx="6" class="d-surface" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
   <use href="#rt-ec2" x="242.0" y="170" width="28" height="28"/>
   <text x="256.0" y="218" text-anchor="middle" font-weight="600" fill="currentColor">Node</text>
-  <text x="256.0" y="235" text-anchor="middle" font-size="11" style="fill:var(--muted)">10.20.0.x</text>
+  <text x="256.0" y="235" text-anchor="middle" font-size="11" class="d-muted">10.20.0.x</text>
   <rect x="350" y="136" width="214" height="126" rx="8" fill="none" stroke="currentColor" stroke-opacity=".35"/>
-  <text x="362" y="153" font-size="11" style="fill:var(--muted)">public subnet</text>
-  <rect x="372" y="162" width="170" height="88" rx="6" style="fill:var(--surface)" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
+  <text x="362" y="153" font-size="11" class="d-muted">public subnet</text>
+  <rect x="372" y="162" width="170" height="88" rx="6" class="d-surface" stroke="currentColor" stroke-opacity=".55" stroke-width="1.2"/>
   <use href="#rt-vpc" x="443.0" y="170" width="28" height="28"/>
   <text x="457.0" y="218" text-anchor="middle" font-weight="600" fill="currentColor">NAT gateway</text>
-  <text x="457.0" y="235" text-anchor="middle" font-size="11" style="fill:var(--muted)">public address</text>
+  <text x="457.0" y="235" text-anchor="middle" font-size="11" class="d-muted">public address</text>
   <rect x="36" y="290" width="294" height="90" rx="8" fill="none" stroke="currentColor" stroke-opacity=".35"/>
-  <text x="106" y="307" font-size="11" style="fill:var(--muted)">pod subnet (tagged)</text>
-  <text x="344" y="312" font-size="11" style="fill:var(--muted)">secondary range: 100.64.0.0/16,</text>
-  <text x="344" y="326" font-size="11" style="fill:var(--muted)">not routed outside the VPC</text>
+  <text x="106" y="307" font-size="11" class="d-muted">pod subnet (tagged)</text>
+  <text x="344" y="312" font-size="11" class="d-muted">secondary range: 100.64.0.0/16,</text>
+  <text x="344" y="326" font-size="11" class="d-muted">not routed outside the VPC</text>
   <g font-size="11" text-anchor="middle">
-    <rect x="52" y="318" width="80" height="48" rx="6" style="fill:var(--accent);stroke:var(--accent)" fill-opacity=".14" stroke-width="1.2"/>
+    <rect x="52" y="318" width="80" height="48" rx="6" class="d-accent d-stroke-accent" fill-opacity=".14" stroke-width="1.2"/>
     <text x="92" y="338" font-weight="600" fill="currentColor">pod</text>
-    <text x="92" y="355" style="fill:var(--muted)">100.64.x.x</text>
-    <rect x="144" y="318" width="80" height="48" rx="6" style="fill:var(--accent);stroke:var(--accent)" fill-opacity=".14" stroke-width="1.2"/>
+    <text x="92" y="355" class="d-muted">100.64.x.x</text>
+    <rect x="144" y="318" width="80" height="48" rx="6" class="d-accent d-stroke-accent" fill-opacity=".14" stroke-width="1.2"/>
     <text x="184" y="338" font-weight="600" fill="currentColor">pod</text>
-    <text x="184" y="355" style="fill:var(--muted)">100.64.x.x</text>
-    <rect x="236" y="318" width="80" height="48" rx="6" style="fill:var(--accent);stroke:var(--accent)" fill-opacity=".14" stroke-width="1.2"/>
+    <text x="184" y="355" class="d-muted">100.64.x.x</text>
+    <rect x="236" y="318" width="80" height="48" rx="6" class="d-accent d-stroke-accent" fill-opacity=".14" stroke-width="1.2"/>
     <text x="276" y="338" font-weight="600" fill="currentColor">pod</text>
-    <text x="276" y="355" style="fill:var(--muted)">100.64.x.x</text>
+    <text x="276" y="355" class="d-muted">100.64.x.x</text>
   </g>
   <line x1="276" y1="318" x2="276" y2="254" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#rt-arrow)"/>
   <text x="284" y="281" font-size="11" fill="currentColor">SNAT: leaves as the node's address</text>

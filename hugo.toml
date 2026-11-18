@@ -39,7 +39,8 @@ enableRobotsTXT = true
 
 [markup]
   [markup.highlight]
-    noClasses = true
+    # Classes, not inline styles, so the CSP needs no 'unsafe-inline'. Colours: assets/css/syntax.css.
+    noClasses = false
     style = "github-dark"
     lineNos = false
   [markup.goldmark.renderer]
