@@ -87,7 +87,7 @@ NAT64 is the other half. Every NAT gateway [does it](https://docs.aws.amazon.com
 
 So on top of what step 1 needs, an IPv6-only subnet needs:
 
-- a Nitro-based instance type, which AWS [requires](https://docs.aws.amazon.com/vpc/latest/userguide/aws-ipv6-support.html);
+- a Nitro-based instance type, which AWS [requires](https://docs.aws.amazon.com/vpc/latest/userguide/create-subnets.html);
 - DNS64 on the subnet;
 - a route for `64:ff9b::/96` to a NAT gateway in a subnet that has IPv4;
 - outbound rules for `64:ff9b::/96`, if your security groups or network ACLs limit outbound traffic. It's an IPv6 destination, so a rule for `0.0.0.0/0` doesn't cover it.
