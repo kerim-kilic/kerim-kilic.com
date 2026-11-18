@@ -31,7 +31,7 @@ resource "aws_cloudfront_response_headers_policy" "security" {
     }
 
     content_security_policy {
-      content_security_policy = "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+      content_security_policy = "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
       override                = true
     }
   }

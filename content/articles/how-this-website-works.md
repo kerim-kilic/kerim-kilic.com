@@ -149,7 +149,7 @@ State is stored in a private, versioned S3 bucket, with one key per environment.
 ## What I would change next
 
 - Run Terraform in CI, not only the checks. Pull requests already get format and validation checks, which need no credentials. But I still run `terraform plan` and `apply` from my laptop, because the credentials they need are too powerful to hand to a public repository's workflows. The next step is plans on pull requests and applies on merge, using a separate, narrowly scoped role.
-- Tighten the Content-Security-Policy. The site has no scripts and loads everything from its own domain, fonts included, so the policy allows only same-origin styles, images and fonts. It still allows inline styles, because the code highlighting and the diagrams use `style` attributes. Moving those into the stylesheet would let me drop that too.
+- Tighten the Content-Security-Policy. The site has no scripts and loads everything from its own domain, fonts included, so the policy allows only same-origin styles, images and fonts. It still allows inline styles, because the code highlighting and the diagrams use `style` attributes. Moving those into the stylesheet would let me drop that too. *Update, 18 November 2026: the site now has one small script, the light and dark toggle in the header. It loads from the site's own domain, so the policy allows scripts from there and nowhere else.*
 - Pin the GitHub Actions to commit SHAs. They follow major-version tags and Dependabot proposes updates, but a maintainer can move a tag and nobody can move a commit SHA.
 - Logging. There are no access logs or alerts yet.
 

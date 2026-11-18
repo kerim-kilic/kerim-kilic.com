@@ -18,13 +18,14 @@ browser --> CloudFront --> S3 (private bucket, origin access control)
 - The CloudFront Function (`terraform/modules/site/function.js.tftpl`) rewrites `/x/` to `/x/index.html` and `/x` to
   `/x/index.html`, because neither CloudFront nor the S3 REST endpoint maps folders to index documents.
 - Every response carries security headers from a custom response-headers policy: a Content-Security-Policy that allows
-  only same-origin styles, images and fonts (no scripts; inline styles are allowed for the code highlighting and the SVG
-  diagrams), HSTS for a year including subdomains (not preloaded), `X-Frame-Options: DENY`, `nosniff`,
-  `strict-origin-when-cross-origin` and a Permissions-Policy that turns off camera, microphone and location.
+  only same-origin scripts, styles, images and fonts (the one script is the colour-theme toggle; inline styles are
+  allowed for the code highlighting and the SVG diagrams), HSTS for a year including subdomains (not preloaded),
+  `X-Frame-Options: DENY`, `nosniff`, `strict-origin-when-cross-origin` and a Permissions-Policy that turns off camera,
+  microphone and location.
 - The `www` redirect keeps the path and the query string (values stay percent-encoded; the order of parameters may
   change, because CloudFront hands the function a parsed query string).
-- HTML is cached at the edge until the next deploy invalidates it and revalidated by browsers; fingerprinted CSS and
-  images are cached for a year; fonts and share images for a day (see [Deployment](#deployment)).
+- HTML is cached at the edge until the next deploy invalidates it and revalidated by browsers; fingerprinted CSS,
+  JavaScript and images are cached for a year; fonts and share images for a day (see [Deployment](#deployment)).
 
 ## Environments
 
@@ -88,9 +89,9 @@ GitHub OIDC, sync to S3 with different `Cache-Control` values per file class, an
 - **Hugo is installed from the official release and checked against a pinned SHA-256** (`HUGO_VERSION` and `HUGO_SHA256`
   in the workflow's `env`; an upgrade changes both). No third-party setup action is involved, and a release file that
   changed after it was pinned fails the build.
-- **Old fingerprinted files are removed last.** New `css/` and `images/` files are uploaded first, then fonts and share
-  images, then the HTML, and only then are the stale `css/` and `images/` files deleted, so a page that is already
-  cached never points at a stylesheet that has gone.
+- **Old fingerprinted files are removed last.** New `css/`, `js/` and `images/` files are uploaded first, then fonts and
+  share images, then the HTML, and only then are the stale fingerprinted files deleted, so a page that is already cached
+  never points at a stylesheet or script that has gone.
 
 - **No AWS keys in GitHub.** Each environment has its own role. The trust policy requires audience `sts.amazonaws.com` and
   a subject that names the exact repository and branch pattern. GitHub's subject claim now carries **immutable numeric
@@ -119,9 +120,9 @@ GitHub OIDC, sync to S3 with different `Cache-Control` values per file class, an
 - **Repository variables** select the target: `AWS_REGION`, and the `DEV_` / `PROD_` bucket name and distribution ID. The
   `DEV_` / `PROD_` role ARN is a repository **secret**, only so that it is masked in public logs (an ARN contains the AWS
   account ID). None of these values is a credential.
-- **Cache policy by file class:** fingerprinted `css/` and `images/` are `immutable` for a year; `fonts/` and `og/` for a
-  day; everything else (HTML, sitemap, feeds) is revalidated by browsers and cached at the edge (`s-maxage`) until the next
-  invalidation.
+- **Cache policy by file class:** fingerprinted `css/`, `js/` and `images/` are `immutable` for a year; `fonts/` and `og/`
+  for a day; everything else (HTML, sitemap, feeds) is revalidated by browsers and cached at the edge (`s-maxage`) until
+  the next invalidation.
 
 ## Decisions
 

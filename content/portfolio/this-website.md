@@ -14,7 +14,7 @@ This site is plain HTML built with Hugo and served from a private S3 bucket thro
 - The S3 bucket blocks all public access. Only this CloudFront distribution can read it, through origin access control.
 - The certificate comes from ACM and is validated through DNS records that Terraform creates in Cloudflare.
 - A CloudFront Function handles clean URLs and redirects `www` to the bare domain, so there's no server to run.
-- Security headers come from a CloudFront response headers policy, including a strict Content-Security-Policy: the site runs no scripts.
+- Security headers come from a CloudFront response headers policy, including a strict Content-Security-Policy: everything loads from the site's own domain, and the only script is the small colour-theme toggle.
 - GitHub Actions deploys by assuming a narrowly scoped IAM role through OIDC. No access keys are stored anywhere.
 - The dev site is a second copy of the same stack behind Cloudflare Access (Google sign-in or a one-time email code, allowlist only). Cloudflare adds a secret header that CloudFront checks, so nobody can go around the login through the raw `cloudfront.net` address.
 

@@ -112,7 +112,7 @@ jobs:
           # Fingerprinted assets (hash in the filename): safe to cache for a year. Uploaded first and without
           # --delete, so the old files stay until the new HTML that stops referencing them is in place (last pass).
           aws s3 sync public/ "$dest" \
-            --exclude "*" --include "css/*" --include "images/*" \
+            --exclude "*" --include "css/*" --include "js/*" --include "images/*" \
             --cache-control "public, max-age=31536000, immutable"
 
           # Static files whose names never change: cache for a day.
@@ -123,12 +123,12 @@ jobs:
           # Everything else (HTML, sitemap, feeds, robots.txt): browsers always revalidate,
           # CloudFront keeps it until the invalidation below.
           aws s3 sync public/ "$dest" --delete \
-            --exclude "css/*" --exclude "images/*" --exclude "fonts/*" --exclude "og/*" \
+            --exclude "css/*" --exclude "js/*" --exclude "images/*" --exclude "fonts/*" --exclude "og/*" \
             --cache-control "public, max-age=0, s-maxage=86400, must-revalidate"
 
           # Now that the HTML points at the new fingerprinted files, remove the old ones. Uploads nothing new.
           aws s3 sync public/ "$dest" --delete \
-            --exclude "*" --include "css/*" --include "images/*" \
+            --exclude "*" --include "css/*" --include "js/*" --include "images/*" \
             --cache-control "public, max-age=31536000, immutable"
 
       - name: Invalidate CloudFront
