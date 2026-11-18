@@ -2,9 +2,9 @@ data "aws_cloudfront_cache_policy" "optimized" {
   name = "Managed-CachingOptimized"
 }
 
-# Security headers on every response. The CSP fits a static site with no scripts: styles, images and fonts come from
-# the site itself; 'unsafe-inline' for styles covers the inline style attributes of the code highlighting and the SVG
-# diagrams. HSTS covers subdomains (www and dev are HTTPS-only) but is deliberately not submitted for preload.
+# Security headers on every response. The CSP allows only the site itself: scripts (the colour-theme toggle), styles,
+# images and fonts. No 'unsafe-inline': the code highlighting and the SVG diagrams use classes, not style attributes.
+# HSTS covers subdomains (www and dev are HTTPS-only) but is deliberately not submitted for preload.
 resource "aws_cloudfront_response_headers_policy" "security" {
   name    = "${local.bucket_name}-security-headers"
   comment = "Security headers for ${var.hostname}"
@@ -31,7 +31,7 @@ resource "aws_cloudfront_response_headers_policy" "security" {
     }
 
     content_security_policy {
-      content_security_policy = "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+      content_security_policy = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
       override                = true
     }
   }

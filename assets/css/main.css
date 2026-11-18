@@ -199,7 +199,7 @@ body.home::before {
 .prose table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
 .prose th, .prose td { border: 1px solid var(--border); padding: 0.4rem 0.75rem; text-align: left; }
 code { font: 0.9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px; }
-pre { overflow-x: auto; padding: 1rem; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.5; }
+pre { overflow-x: auto; padding: 1rem; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.5; tab-size: 4; }
 pre code { background: none; padding: 0; }
 .highlight pre { border: 1px solid var(--border); }
 
@@ -211,6 +211,12 @@ pre code { background: none; padding: 0; }
 /* Diagrams: wider than the text column, scroll sideways on small screens */
 .prose .diagram { margin: 2rem 0; width: 100cqw; max-width: none; overflow-x: auto; }
 .diagram svg { display: block; width: 100%; min-width: 46rem; height: auto; color: var(--text); }
+/* Diagram colours as classes (not style attributes), so they follow the theme without 'unsafe-inline' in the CSP. */
+.diagram .d-muted { fill: var(--muted); }
+.diagram .d-accent { fill: var(--accent); }
+.diagram .d-surface { fill: var(--surface); }
+.diagram .d-stroke-accent { stroke: var(--accent); }
+.diagram .d-stroke-muted { stroke: var(--muted); }
 .diagram figcaption { max-width: var(--measure); margin-top: 0.75rem; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
 
 /* Icons and social links */
