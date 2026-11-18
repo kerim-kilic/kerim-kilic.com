@@ -87,17 +87,19 @@ img { max-width: 100%; height: auto; }
 .brand { font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--text); }
 .bar ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; margin: 0; padding: 0; }
 .bar nav a, .site-footer a { color: var(--muted); text-decoration: none; }
-.site-header .bar { padding-block: 0.25rem; }
+/* The header stays on one line: the menu never wraps, the name wraps onto two lines when space runs short. */
+.site-header .bar { padding-block: 0.25rem; flex-wrap: nowrap; }
+.site-header .brand { line-height: 1.15; }
+.site-header nav ul { flex-wrap: nowrap; }
 .site-header nav a { display: inline-block; padding-block: 0.75rem; }
 @media (max-width: 30rem) {
-  .site-header .bar { flex-wrap: nowrap; gap: 1rem; }
-  .brand { font-size: 1.05rem; white-space: nowrap; }
+  .site-header .bar { gap: 1rem; }
+  .brand { font-size: 1.05rem; }
   .site-header nav ul { gap: 0 0.8rem; font-size: 0.95rem; }
 }
-@media (max-width: 24rem) {
+@media (max-width: 25rem) {
   .site-header .bar { gap: 0.75rem; }
-  .brand { white-space: normal; line-height: 1.15; }
-  .site-header nav ul { flex-wrap: nowrap; gap: 0 0.6rem; font-size: 0.875rem; }
+  .site-header nav ul { gap: 0 0.6rem; font-size: 0.875rem; }
 }
 .site-header nav { margin-left: auto; }
 .theme-toggle { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; margin-right: -0.5rem; padding: 0; border: 1px solid transparent; border-radius: var(--radius); background: none; color: var(--muted); cursor: pointer; }
