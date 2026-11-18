@@ -18,8 +18,8 @@ browser --> CloudFront --> S3 (private bucket, origin access control)
 - The CloudFront Function (`terraform/modules/site/function.js.tftpl`) rewrites `/x/` to `/x/index.html` and `/x` to
   `/x/index.html`, because neither CloudFront nor the S3 REST endpoint maps folders to index documents.
 - Every response carries security headers from a custom response-headers policy: a Content-Security-Policy that allows
-  only same-origin scripts, styles, images and fonts (the one script is the colour-theme toggle; inline styles are
-  allowed for the code highlighting and the SVG diagrams), HSTS for a year including subdomains (not preloaded),
+  only same-origin scripts, styles, images and fonts, with no inline scripts or styles (the one script is the
+  colour-theme toggle; the code highlighting and the SVG diagrams use classes), HSTS for a year including subdomains (not preloaded),
   `X-Frame-Options: DENY`, `nosniff`, `strict-origin-when-cross-origin` and a Permissions-Policy that turns off camera,
   microphone and location.
 - The `www` redirect keeps the path and the query string (values stay percent-encoded; the order of parameters may
